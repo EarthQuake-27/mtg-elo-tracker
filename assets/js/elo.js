@@ -58,8 +58,16 @@
     if (!meta) return "";
     const builder = COLOR_ICON_BUILDERS[code];
     const icon = builder ? builder(meta.text, meta.hex) : "";
+    // White's fill is so close to the page background that a faint border
+    // leaves its circle with no visible edge, making it read as a
+    // different size than the vividly-colored circles (which need no
+    // border to look crisply bounded). Give it a much stronger outline so
+    // every color's circle is equally well-defined.
+    const isLight = code === "W";
+    const strokeColor = isLight ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.18)";
+    const strokeWidth = isLight ? 5 : 3;
     return `<svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block;" aria-hidden="true">
-      <circle cx="50" cy="50" r="48" fill="${meta.hex}" stroke="rgba(0,0,0,0.18)" stroke-width="3"></circle>
+      <circle cx="50" cy="50" r="47" fill="${meta.hex}" stroke="${strokeColor}" stroke-width="${strokeWidth}"></circle>
       ${icon}
     </svg>`;
   }
