@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giocatori – Elo del Gruppo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <div class="nav-links">
+      <a href="index.html">Classifica</a>
+      <a href="players.html" class="active">Giocatori</a>
+      <a href="new-match.html">Nuova Partita</a>
+      <a href="settings.html">Impostazioni</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Giocatori</h1>
+  <p class="subtitle">Tutti i membri del gruppo. Clicca su un nome per vedere le statistiche individuali.</p>
+
+  <div id="msg-area"></div>
+
+  <div class="card">
+    <div class="table-scroll">
+      <table id="players-table">
+        <thead>
+          <tr>
+            <th>Giocatore</th>
+            <th class="num">Elo</th>
+            <th class="num">Partite</th>
+            <th>Da quando</th>
+          </tr>
+        </thead>
+        <tbody id="players-body">
+          <tr><td colspan="4" class="empty-state">Caricamento…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Aggiungi un nuovo giocatore</h2>
+  <div class="card">
+    <form id="new-player-form">
+      <label for="player-name">Nome</label>
+      <input type="text" id="player-name" placeholder="es. Federico" required>
+
+      <label for="player-joined">Data di ingresso nel gruppo</label>
+      <input type="date" id="player-joined" required>
+
+      <div id="new-player-msg"></div>
+
+      <div style="margin-top:18px;">
+        <button type="submit" class="btn" id="submit-player-btn">Aggiungi giocatore</button>
+      </div>
+    </form>
+    <p class="footer-note" style="margin-top:16px;">Serve un token GitHub configurato in <a href="settings.html">Impostazioni</a> per poter salvare.</p>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/elo.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/github-api.js"></script>
+<script src="assets/js/page-players.js"></script>
+</body>
+</html>

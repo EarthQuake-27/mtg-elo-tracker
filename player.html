@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistiche giocatore – Elo del Gruppo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <div class="nav-links">
+      <a href="index.html">Classifica</a>
+      <a href="players.html" class="active">Giocatori</a>
+      <a href="new-match.html">Nuova Partita</a>
+      <a href="settings.html">Impostazioni</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="msg-area"></div>
+
+  <div id="player-content" style="display:none;">
+    <h1 id="player-name">—</h1>
+    <p class="subtitle" id="player-subtitle">—</p>
+
+    <div class="stat-grid">
+      <div class="stat-tile"><div class="label">Elo attuale</div><div class="value" id="stat-elo">—</div></div>
+      <div class="stat-tile"><div class="label">Posizione</div><div class="value" id="stat-rank">—</div></div>
+      <div class="stat-tile"><div class="label">Partite</div><div class="value" id="stat-matches">—</div></div>
+      <div class="stat-tile"><div class="label">V - P - S</div><div class="value" id="stat-record">—</div></div>
+      <div class="stat-tile"><div class="label">% Vittorie</div><div class="value" id="stat-winrate">—</div></div>
+      <div class="stat-tile"><div class="label">Game (V-S)</div><div class="value" id="stat-games">—</div></div>
+    </div>
+
+    <h2>Andamento Elo</h2>
+    <div class="card">
+      <div id="elo-chart"></div>
+    </div>
+
+    <h2>Colori giocati</h2>
+    <div class="card" id="color-usage-card"></div>
+
+    <h2>Storico partite</h2>
+    <div class="card">
+      <div class="table-scroll">
+        <table id="matches-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Avversario</th>
+              <th>Risultato</th>
+              <th>Mazzo</th>
+              <th>Mazzo avversario</th>
+              <th class="num">Δ Elo</th>
+            </tr>
+          </thead>
+          <tbody id="matches-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/elo.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/github-api.js"></script>
+<script src="assets/js/sparkline.js"></script>
+<script src="assets/js/page-player.js"></script>
+</body>
+</html>

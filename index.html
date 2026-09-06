@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classifica – Elo del Gruppo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Classifica</a>
+      <a href="players.html">Giocatori</a>
+      <a href="new-match.html">Nuova Partita</a>
+      <a href="settings.html">Impostazioni</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Classifica Elo</h1>
+  <p class="subtitle">Punteggio Elo calcolato su tutte le partite giocate dal gruppo.</p>
+
+  <div id="msg-area"></div>
+
+  <div class="card">
+    <div class="table-scroll">
+      <table id="ranking-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Giocatore</th>
+            <th class="num">Elo</th>
+            <th class="num">Partite</th>
+            <th>V-P-S</th>
+            <th class="num">% Vittorie</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-body">
+          <tr><td colspan="6" class="empty-state">Caricamento…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Ultime partite</h2>
+  <div class="card">
+    <div class="table-scroll">
+      <table id="recent-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Match</th>
+            <th>Risultato</th>
+            <th class="num">Δ Elo</th>
+          </tr>
+        </thead>
+        <tbody id="recent-body">
+          <tr><td colspan="4" class="empty-state">Caricamento…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="footer-note">Elo iniziale: <span id="cfg-base-elo"></span> · K-factor: <span id="cfg-base-k"></span> (ridotto per i risultati 1-0/0-1)</p>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/elo.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/github-api.js"></script>
+<script src="assets/js/page-index.js"></script>
+</body>
+</html>
