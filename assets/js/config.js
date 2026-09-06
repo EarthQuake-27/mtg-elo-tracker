@@ -6,7 +6,7 @@ window.EloApp = window.EloApp || {};
 
 window.EloApp.CONFIG = {
   // --- EDIT BEFORE PUBLISHING ---
-  GITHUB_OWNER: "YOUR-GITHUB-USERNAME", // e.g. "altarfede"
+  GITHUB_OWNER: "EarthQuake-27",
   GITHUB_REPO: "mtg-elo-tracker",       // name of the GitHub repository
   GITHUB_BRANCH: "main",
 
