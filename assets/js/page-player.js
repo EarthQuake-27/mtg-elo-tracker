@@ -196,9 +196,12 @@
           const oppColors = isA ? m.colorsB : m.colorsA;
           const mySplash = isA ? m.splashA : m.splashB;
           const oppSplash = isA ? m.splashB : m.splashA;
-          const myArchetype = isA ? m.archetypeA : m.archetypeB;
-          const oppArchetype = isA ? m.archetypeB : m.archetypeA;
-          const archetypeLine = (a) => (a ? `<div style="font-size:.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(a)}</div>` : "");
+          const myArchetypes = isA ? m.archetypesA : m.archetypesB;
+          const oppArchetypes = isA ? m.archetypesB : m.archetypesA;
+          const archetypeLine = (list) =>
+            list && list.length
+              ? `<div style="font-size:.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(list.join(" + "))}</div>`
+              : "";
           const badge =
             myScore > oppScore
               ? '<span class="badge win">Win</span>'
@@ -214,8 +217,8 @@
             <td>${dateLabel}</td>
             <td><a href="player.html?id=${encodeURIComponent(oppId)}">${escapeHtml(oppName)}</a></td>
             <td>${myScore}-${oppScore} ${badge}</td>
-            <td>${colorPips(myColors, mySplash)}${archetypeLine(myArchetype)}</td>
-            <td>${colorPips(oppColors, oppSplash)}${archetypeLine(oppArchetype)}</td>
+            <td>${colorPips(myColors, mySplash)}${archetypeLine(myArchetypes)}</td>
+            <td>${colorPips(oppColors, oppSplash)}${archetypeLine(oppArchetypes)}</td>
             <td class="num"><span class="${delta >= 0 ? "delta-pos" : "delta-neg"}">${delta >= 0 ? "+" : ""}${delta.toFixed(1)}</span></td>
           </tr>`;
         })

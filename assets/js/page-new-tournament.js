@@ -129,7 +129,7 @@
     const map = new Map();
     (cfg.DEFAULT_ARCHETYPES || []).forEach((name) => map.set(name.toLowerCase(), { id: name, name }));
     matches.forEach((m) => {
-      [m.archetypeA, m.archetypeB].forEach((a) => {
+      [...(m.archetypesA || []), ...(m.archetypesB || [])].forEach((a) => {
         const name = (a || "").trim();
         if (!name) return;
         const key = name.toLowerCase();
@@ -152,7 +152,7 @@
       <div class="color-grid" id="main-${uid}"></div>
       <div class="color-group-label">Splash <span class="splash-badge">optional, up to ${cfg.MAX_SPLASH_COLORS}</span></div>
       <div class="color-grid" id="splash-${uid}"></div>
-      <div class="color-group-label">Archetype <span class="splash-badge">optional</span></div>
+      <div class="color-group-label">Archetype(s) <span class="splash-badge">optional</span></div>
       <div class="archetype-col"></div>
     `;
     participantsList.appendChild(card);
@@ -161,9 +161,9 @@
       placeholder: "Player name",
     });
     const picker = setupColorPicker(card.querySelector(`#main-${uid}`), card.querySelector(`#splash-${uid}`));
-    const archetypeCombo = EloApp.createTagCombobox(card.querySelector(".archetype-col"), archetypeItems, {
+    const archetypeInput = EloApp.createTagMultiInput(card.querySelector(".archetype-col"), archetypeItems, {
       itemLabel: "archetype",
-      placeholder: "e.g. Aggro, Control, Combo…",
+      placeholder: "e.g. Aggro, Control… (Enter to add)",
       emptyLabel: "Type to pick or create an archetype.",
     });
 
@@ -172,7 +172,7 @@
       participantRows = participantRows.filter((r) => r.card !== card);
     });
 
-    participantRows.push({ card, combo, picker, archetypeCombo });
+    participantRows.push({ card, combo, picker, archetypeInput });
   }
 
   function gatherParticipants() {
@@ -184,10 +184,9 @@
       const val = pr.combo.getValue();
       const mainColors = pr.picker.getMainColors();
       const splashColors = pr.picker.getSplashColors();
-      const archetypeVal = pr.archetypeCombo.getValue();
-      const archetype = archetypeVal.mode === "empty" ? "" : archetypeVal.name.trim();
+      const archetypes = pr.archetypeInput.getValues();
 
-      if (val.mode === "empty" && mainColors.length === 0 && splashColors.length === 0 && !archetype) return; // blank row, ignored
+      if (val.mode === "empty" && mainColors.length === 0 && splashColors.length === 0 && archetypes.length === 0) return; // blank row, ignored
 
       if (val.mode === "empty") {
         errors.push(`Row ${idx + 1}: you selected colors or an archetype but didn't enter a name.`);
@@ -206,7 +205,7 @@
       result.push({
         name: val.name.trim(),
         colors: mainColors,
-        archetype,
+        archetypes,
         splash: splashColors,
         existingId: val.mode === "existing" ? val.id : null,
       });
@@ -444,8 +443,8 @@
             colorsB: pB.colors,
             splashA: pA.splash,
             splashB: pB.splash,
-            archetypeA: pA.archetype,
-            archetypeB: pB.archetype,
+            archetypesA: pA.archetypes,
+            archetypesB: pB.archetypes,
             note: "",
           });
         });

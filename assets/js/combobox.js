@@ -142,20 +142,56 @@
       setTimeout(() => {
         list.hidden = true;
         resolveFromInput();
+        // In "commit" mode, don't silently drop text left in the field
+        // when the user tabs/clicks away without pressing Enter.
+        if (opts.onCommit && resolved.mode !== "empty") {
+          opts.onCommit(resolved);
+          input.value = "";
+          resolved = { mode: "empty" };
+          updateHint();
+        }
       }, 150);
     });
+
+    // In "commit" mode (used by the multi-tag input) Enter accepts the
+    // current text as one tag and clears the field, ready for the next one.
+    if (opts.onCommit) {
+      input.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        resolveFromInput();
+        if (resolved.mode === "empty") return;
+        opts.onCommit(resolved);
+        input.value = "";
+        resolved = { mode: "empty" };
+        updateHint();
+        list.hidden = true;
+      });
+    }
 
     list.addEventListener("mousedown", (e) => {
       const item = e.target.closest(".combobox-item");
       if (!item || item.classList.contains("combobox-empty")) return;
       e.preventDefault();
+      let value;
       if (item.dataset.new) {
-        resolved = { mode: "new", name: input.value.trim() };
+        value = { mode: "new", name: input.value.trim() };
       } else {
         const found = items.find((p) => p.id === item.dataset.id);
-        input.value = found.name;
-        resolved = { mode: "existing", id: found.id, name: found.name };
+        value = { mode: "existing", id: found.id, name: found.name };
       }
+
+      if (opts.onCommit) {
+        opts.onCommit(value);
+        input.value = "";
+        resolved = { mode: "empty" };
+        updateHint();
+        list.hidden = true;
+        return;
+      }
+
+      resolved = value;
+      if (value.mode === "existing") input.value = value.name;
       updateHint();
       list.hidden = true;
       if (opts.onChange) opts.onChange(resolved);
@@ -171,6 +207,76 @@
     };
   }
 
+  /**
+   * Multiple tags picked one at a time via a createTagCombobox (Enter or
+   * click commits the current text as a chip and clears the field for the
+   * next one). Used for deck archetypes: a "Reanimator-Control" deck adds
+   * two separate chips, "Reanimator" and "Control", so each is counted on
+   * its own in the stats instead of forming a brand new, incomparable
+   * category.
+   *
+   * Usage:
+   *   const tags = EloApp.createTagMultiInput(container, allItems, opts);
+   *   tags.getValues() -> ["Reanimator", "Control"]
+   */
+  function createTagMultiInput(container, allItems, opts) {
+    opts = opts || {};
+    container.classList.add("tag-multi-input");
+    container.innerHTML = `<div class="tag-chip-row"></div><div class="tag-combo-slot"></div>`;
+
+    const chipRow = container.querySelector(".tag-chip-row");
+    const comboSlot = container.querySelector(".tag-combo-slot");
+    let selected = [];
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function availableItems() {
+      const selectedLower = new Set(selected.map((s) => s.toLowerCase()));
+      return allItems.filter((it) => !selectedLower.has(it.name.toLowerCase()));
+    }
+
+    function renderChips() {
+      chipRow.innerHTML = selected
+        .map(
+          (name, i) =>
+            `<span class="tag-chip">${escapeHtml(name)}<button type="button" data-i="${i}" aria-label="Remove ${escapeHtml(name)}">✕</button></span>`
+        )
+        .join("");
+      chipRow.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selected.splice(Number(btn.dataset.i), 1);
+          renderChips();
+          combo.setItems(availableItems());
+        });
+      });
+    }
+
+    const combo = createTagCombobox(comboSlot, availableItems(), {
+      itemLabel: opts.itemLabel || "tag",
+      placeholder: opts.placeholder,
+      emptyLabel: opts.emptyLabel,
+      onCommit: (value) => {
+        const name = value.name.trim();
+        if (!name) return;
+        if (selected.some((s) => s.toLowerCase() === name.toLowerCase())) return;
+        selected.push(name);
+        renderChips();
+        combo.setItems(availableItems());
+      },
+    });
+
+    renderChips();
+
+    return {
+      getValues: () => selected.slice(),
+      el: container,
+    };
+  }
+
   function createPlayerCombobox(container, players, opts) {
     return createTagCombobox(container, players, {
       itemLabel: "player",
@@ -182,4 +288,5 @@
   window.EloApp = window.EloApp || {};
   window.EloApp.createTagCombobox = createTagCombobox;
   window.EloApp.createPlayerCombobox = createPlayerCombobox;
+  window.EloApp.createTagMultiInput = createTagMultiInput;
 })(window);

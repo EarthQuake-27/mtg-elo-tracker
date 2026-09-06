@@ -151,6 +151,11 @@
    * deck" distribution (mono/2-color/3-color/...) is based on main colors
    * only, so a 2-color deck with a splash is still counted as a 2-color
    * deck, distinct from an actual 3-color deck.
+   *
+   * Archetypes are tags, not a single label: a deck can carry several
+   * (e.g. "Reanimator" + "Control"), and each tag is counted on its own so
+   * archetypes stay comparable across decks instead of every combination
+   * forming its own one-off category.
    */
   function computeDeckStats(playerId, matches) {
     const deckMap = new Map();
@@ -158,15 +163,15 @@
     matches.forEach((m) => {
       let main = null;
       let splash = null;
-      let archetype = null;
+      let archetypes = null;
       if (m.playerA === playerId) {
         main = m.colorsA;
         splash = m.splashA;
-        archetype = m.archetypeA;
+        archetypes = m.archetypesA;
       } else if (m.playerB === playerId) {
         main = m.colorsB;
         splash = m.splashB;
-        archetype = m.archetypeB;
+        archetypes = m.archetypesB;
       } else {
         return;
       }
@@ -176,7 +181,11 @@
         deckMap.set(key, {
           main: Array.from(new Set(main || [])),
           splash: Array.from(new Set(splash || [])),
-          archetype: (archetype || "").trim(),
+          // Each archetype tag is tracked independently: a "Reanimator +
+          // Control" deck counts once toward Reanimator AND once toward
+          // Control, rather than forming its own "Reanimator-Control"
+          // bucket that couldn't be compared to either.
+          archetypes: Array.from(new Set((archetypes || []).map((a) => a.trim()).filter(Boolean))),
         });
       }
     });
@@ -189,7 +198,7 @@
     const archetypeCounts = {};
     let splashDeckCount = 0;
 
-    decks.forEach(({ main, splash, archetype }) => {
+    decks.forEach(({ main, splash, archetypes }) => {
       main.forEach((c) => {
         if (colorPresenceMain[c] != null) colorPresenceMain[c]++;
       });
@@ -200,8 +209,13 @@
       const n = Math.min(main.length, 5);
       colorCountHist[n]++;
 
-      const label = archetype || "Unspecified";
-      archetypeCounts[label] = (archetypeCounts[label] || 0) + 1;
+      if (archetypes.length === 0) {
+        archetypeCounts.Unspecified = (archetypeCounts.Unspecified || 0) + 1;
+      } else {
+        archetypes.forEach((a) => {
+          archetypeCounts[a] = (archetypeCounts[a] || 0) + 1;
+        });
+      }
     });
 
     return { totalDecks, colorPresenceMain, colorPresenceSplash, colorCountHist, splashDeckCount, archetypeCounts };
