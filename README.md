@@ -19,7 +19,9 @@ volta che qualcuno apre il sito.
 
 Le partite del gruppo non sono mai "una tantum": si gioca sempre in mini-tornei
 di più turni (tipicamente 3) in cui ogni giocatore usa lo stesso mazzo per
-tutto il torneo. Il form **Nuovo Torneo** rispecchia questo:
+tutto il torneo. Il form **Nuovo Torneo** rispecchia questo (più un **nome
+del torneo** facoltativo, es. "Friday Night Magic" — se lo lasci vuoto,
+ovunque il torneo viene mostrato compare solo la data):
 
 1. **Partecipanti**: scrivi il nome di ognuno (una casella con suggerimenti —
    se il nome esiste già te lo propone, altrimenti verrà creato un nuovo

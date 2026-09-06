@@ -10,6 +10,7 @@
   const step2Msg = document.getElementById("step2-msg");
   const participantsList = document.getElementById("participants-list");
   const addParticipantBtn = document.getElementById("add-participant-btn");
+  const tournamentNameInput = document.getElementById("tournament-name");
   const tournamentDateInput = document.getElementById("tournament-date");
   const roundsCountInput = document.getElementById("rounds-count");
   const toStep2Btn = document.getElementById("to-step2-btn");
@@ -218,6 +219,7 @@
 
   // --- Step 2: rounds and matchups ---
   let resolvedParticipants = [];
+  let tournamentName = "";
   let tournamentDate = "";
   let roundsCount = 3;
 
@@ -345,6 +347,7 @@
     }
 
     resolvedParticipants = result;
+    tournamentName = tournamentNameInput.value.trim();
     tournamentDate = tournamentDateInput.value;
     roundsCount = Math.min(roundsVal, 12);
 
@@ -431,6 +434,7 @@
             id: `${tournamentId}_r${round}_${matchCounter++}`,
             date: tournamentDate,
             tournamentId,
+            tournamentName,
             round,
             playerA: pA.finalId,
             playerB: pB.finalId,
@@ -452,7 +456,7 @@
       await EloApp.github.saveJsonFile(
         "data/matches.json",
         updatedMatches,
-        `Tournament on ${tournamentDate}: ${newMatches.length} matches, ${roundsCount} rounds`,
+        `Tournament${tournamentName ? ` "${tournamentName}"` : ""} on ${tournamentDate}: ${newMatches.length} matches, ${roundsCount} rounds`,
         matchesSha
       );
 
@@ -480,6 +484,7 @@
     participantsList.innerHTML = "";
     participantRows = [];
     for (let i = 0; i < 8; i++) addParticipantRow();
+    tournamentNameInput.value = "";
     tournamentDateInput.value = new Date().toISOString().slice(0, 10);
     roundsCountInput.value = "3";
     step2.hidden = true;

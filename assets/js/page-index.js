@@ -38,7 +38,7 @@
     const groups = new Map();
     matchLog.forEach((m) => {
       const key = m.tournamentId || `standalone:${m.id}`;
-      if (!groups.has(key)) groups.set(key, { key, date: m.date, matches: [] });
+      if (!groups.has(key)) groups.set(key, { key, date: m.date, name: m.tournamentName || "", matches: [] });
       groups.get(key).matches.push(m);
       if (m.date > groups.get(key).date) groups.get(key).date = m.date;
     });
@@ -77,7 +77,7 @@
         latestTournamentSubtitle.textContent = "";
         recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">No tournament recorded yet. <a href="new-tournament.html">Add one</a>.</td></tr>`;
       } else {
-        latestTournamentSubtitle.textContent = `Played on ${latest.date}`;
+        latestTournamentSubtitle.textContent = latest.name ? `${latest.name} · Played on ${latest.date}` : `Played on ${latest.date}`;
         recentBody.innerHTML = latest.matches
           .map((m) => {
             const sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;

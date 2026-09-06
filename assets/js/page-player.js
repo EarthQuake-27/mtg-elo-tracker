@@ -205,7 +205,10 @@
               : myScore < oppScore
               ? '<span class="badge loss">Loss</span>'
               : '<span class="badge draw">Draw</span>';
-          const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· Round ${m.round}</span>` : m.date;
+          const roundPart = m.round ? `Round ${m.round}` : "";
+          const namePart = m.tournamentName ? escapeHtml(m.tournamentName) : "";
+          const suffix = [namePart, roundPart].filter(Boolean).join(" · ");
+          const dateLabel = suffix ? `${m.date} <span style="color:var(--text-muted);">· ${suffix}</span>` : m.date;
 
           return `<tr>
             <td>${dateLabel}</td>
