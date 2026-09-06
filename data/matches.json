@@ -1,1 +1,377 @@
-[]
+[
+  {
+    "id": "t_mtq7yn6kw4up_r1_0",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 1,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9o5zi",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Reanimator",
+      "Control"
+    ],
+    "archetypesB": [
+      "Counters"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r1_1",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 1,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mtq7yme9bjf6",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "B",
+      "R",
+      "G"
+    ],
+    "splashA": [
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Storm"
+    ],
+    "archetypesB": [
+      "Aristocrats",
+      "Discard"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r1_2",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 1,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Modular",
+      "Reanimator"
+    ],
+    "archetypesB": [
+      "Artifact"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r1_3",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 1,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [
+      "Tokens"
+    ],
+    "archetypesB": [
+      "Modular",
+      "Midrange",
+      "Soup"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r2_4",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 2,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9bjf6",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "B",
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Reanimator",
+      "Control"
+    ],
+    "archetypesB": [
+      "Aristocrats",
+      "Discard"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r2_5",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 2,
+    "playerA": "p_mtq7yme9rckf",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [
+      "U"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Modular",
+      "Midrange",
+      "Soup"
+    ],
+    "archetypesB": [
+      "Artifact"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r2_6",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 2,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "B"
+    ],
+    "archetypesA": [
+      "Tokens"
+    ],
+    "archetypesB": [
+      "Storm"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r2_7",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 2,
+    "playerA": "p_mtq7yme9o5zi",
+    "playerB": "p_mtq7yme95m8i",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Counters"
+    ],
+    "archetypesB": [
+      "Modular",
+      "Reanimator"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r3_8",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 3,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [
+      "Reanimator",
+      "Control"
+    ],
+    "archetypesB": [
+      "Modular",
+      "Midrange",
+      "Soup"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r3_9",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 3,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 2,
+    "scoreB": 1,
+    "colorsA": [
+      "B",
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Aristocrats",
+      "Discard"
+    ],
+    "archetypesB": [
+      "Artifact"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r3_10",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 3,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mtq7yme9o5zi",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Storm"
+    ],
+    "archetypesB": [
+      "Counters"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtq7yn6kw4up_r3_11",
+    "date": "2026-09-05",
+    "tournamentId": "t_mtq7yn6kw4up",
+    "tournamentName": "Modern Horizon 2",
+    "round": 3,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mtq7yme9dknv",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "B"
+    ],
+    "colorsB": [
+      "U",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Modular",
+      "Reanimator"
+    ],
+    "archetypesB": [
+      "Tokens"
+    ],
+    "note": ""
+  }
+]
