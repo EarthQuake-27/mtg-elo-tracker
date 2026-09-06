@@ -158,12 +158,15 @@
     matches.forEach((m) => {
       let main = null;
       let splash = null;
+      let archetype = null;
       if (m.playerA === playerId) {
         main = m.colorsA;
         splash = m.splashA;
+        archetype = m.archetypeA;
       } else if (m.playerB === playerId) {
         main = m.colorsB;
         splash = m.splashB;
+        archetype = m.archetypeB;
       } else {
         return;
       }
@@ -173,6 +176,7 @@
         deckMap.set(key, {
           main: Array.from(new Set(main || [])),
           splash: Array.from(new Set(splash || [])),
+          archetype: (archetype || "").trim(),
         });
       }
     });
@@ -182,9 +186,10 @@
     const colorPresenceMain = emptyColorCounts();
     const colorPresenceSplash = emptyColorCounts();
     const colorCountHist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const archetypeCounts = {};
     let splashDeckCount = 0;
 
-    decks.forEach(({ main, splash }) => {
+    decks.forEach(({ main, splash, archetype }) => {
       main.forEach((c) => {
         if (colorPresenceMain[c] != null) colorPresenceMain[c]++;
       });
@@ -194,9 +199,12 @@
       if (splash.length > 0) splashDeckCount++;
       const n = Math.min(main.length, 5);
       colorCountHist[n]++;
+
+      const label = archetype || "Unspecified";
+      archetypeCounts[label] = (archetypeCounts[label] || 0) + 1;
     });
 
-    return { totalDecks, colorPresenceMain, colorPresenceSplash, colorCountHist, splashDeckCount };
+    return { totalDecks, colorPresenceMain, colorPresenceSplash, colorCountHist, splashDeckCount, archetypeCounts };
   }
 
   window.EloApp.COLORS = COLORS;

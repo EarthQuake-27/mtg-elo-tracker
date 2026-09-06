@@ -160,6 +160,24 @@
       colorDistCard.innerHTML = rows + `<hr style="border:none; border-top:1px solid var(--border); margin:14px 0;">` + splashRow;
     }
 
+    // Archetypes played (one per deck, same tournament-based dedup as colors)
+    const archetypeCard = document.getElementById("archetype-card");
+    if (deckStats.totalDecks === 0) {
+      archetypeCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
+    } else {
+      const entries = Object.entries(deckStats.archetypeCounts).sort((a, b) => b[1] - a[1]);
+      archetypeCard.innerHTML = entries
+        .map(([name, count]) => {
+          const pct = Math.round((count / deckStats.totalDecks) * 100);
+          return `<div class="color-bar">
+            <div class="bar-label">${escapeHtml(name)}</div>
+            ${statBar([{ pct, color: "var(--accent)", label: name }])}
+            <div class="count">${pct}% <span style="opacity:.6;">(${count})</span></div>
+          </div>`;
+        })
+        .join("");
+    }
+
     // Match history (only this player's matches)
     const myMatches = matchLog.filter((m) => m.playerA === playerId || m.playerB === playerId).reverse();
     const matchesBody = document.getElementById("matches-body");
@@ -178,6 +196,9 @@
           const oppColors = isA ? m.colorsB : m.colorsA;
           const mySplash = isA ? m.splashA : m.splashB;
           const oppSplash = isA ? m.splashB : m.splashA;
+          const myArchetype = isA ? m.archetypeA : m.archetypeB;
+          const oppArchetype = isA ? m.archetypeB : m.archetypeA;
+          const archetypeLine = (a) => (a ? `<div style="font-size:.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(a)}</div>` : "");
           const badge =
             myScore > oppScore
               ? '<span class="badge win">Win</span>'
@@ -190,8 +211,8 @@
             <td>${dateLabel}</td>
             <td><a href="player.html?id=${encodeURIComponent(oppId)}">${escapeHtml(oppName)}</a></td>
             <td>${myScore}-${oppScore} ${badge}</td>
-            <td>${colorPips(myColors, mySplash)}</td>
-            <td>${colorPips(oppColors, oppSplash)}</td>
+            <td>${colorPips(myColors, mySplash)}${archetypeLine(myArchetype)}</td>
+            <td>${colorPips(oppColors, oppSplash)}${archetypeLine(oppArchetype)}</td>
             <td class="num"><span class="${delta >= 0 ? "delta-pos" : "delta-neg"}">${delta >= 0 ? "+" : ""}${delta.toFixed(1)}</span></td>
           </tr>`;
         })

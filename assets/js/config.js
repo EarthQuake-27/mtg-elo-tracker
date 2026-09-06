@@ -23,4 +23,14 @@ window.EloApp.CONFIG = {
 
   // --- Deck-building limits ---
   MAX_SPLASH_COLORS: 2,          // max number of splash colors per deck
+
+  // --- Suggested deck archetypes, shown in the dropdown before anyone has
+  //     typed anything. Any archetype typed during tournament entry is
+  //     added to the suggestions automatically from then on — this list is
+  //     just a starting point so the first tournaments already have
+  //     consistent options to pick from. Feel free to edit it. ---
+  DEFAULT_ARCHETYPES: [
+    "Aggro", "Midrange", "Control", "Combo", "Tempo",
+    "Ramp", "Burn", "Reanimator", "Discard", "Madness", "Mill", "Stax",
+  ],
 };

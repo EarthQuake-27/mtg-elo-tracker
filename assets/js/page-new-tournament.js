@@ -116,8 +116,27 @@
 
   // --- Step 1: participants ---
   let players = [];
+  let archetypeItems = [];
   let participantRows = [];
   let rowUid = 0;
+
+  /** Merges the configured seed archetypes with every archetype already
+   *  used in the match history (case-insensitively deduped), so the
+   *  dropdown always has sensible starting options plus anything the group
+   *  has typed before. */
+  function buildArchetypeItems(matches) {
+    const map = new Map();
+    (cfg.DEFAULT_ARCHETYPES || []).forEach((name) => map.set(name.toLowerCase(), { id: name, name }));
+    matches.forEach((m) => {
+      [m.archetypeA, m.archetypeB].forEach((a) => {
+        const name = (a || "").trim();
+        if (!name) return;
+        const key = name.toLowerCase();
+        if (!map.has(key)) map.set(key, { id: name, name });
+      });
+    });
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   function addParticipantRow() {
     const uid = rowUid++;
@@ -132,6 +151,8 @@
       <div class="color-grid" id="main-${uid}"></div>
       <div class="color-group-label">Splash <span class="splash-badge">optional, up to ${cfg.MAX_SPLASH_COLORS}</span></div>
       <div class="color-grid" id="splash-${uid}"></div>
+      <div class="color-group-label">Archetype <span class="splash-badge">optional</span></div>
+      <div class="archetype-col"></div>
     `;
     participantsList.appendChild(card);
 
@@ -139,13 +160,18 @@
       placeholder: "Player name",
     });
     const picker = setupColorPicker(card.querySelector(`#main-${uid}`), card.querySelector(`#splash-${uid}`));
+    const archetypeCombo = EloApp.createTagCombobox(card.querySelector(".archetype-col"), archetypeItems, {
+      itemLabel: "archetype",
+      placeholder: "e.g. Aggro, Control, Combo…",
+      emptyLabel: "Type to pick or create an archetype.",
+    });
 
     card.querySelector(".row-remove-btn").addEventListener("click", () => {
       card.remove();
       participantRows = participantRows.filter((r) => r.card !== card);
     });
 
-    participantRows.push({ card, combo, picker });
+    participantRows.push({ card, combo, picker, archetypeCombo });
   }
 
   function gatherParticipants() {
@@ -157,11 +183,13 @@
       const val = pr.combo.getValue();
       const mainColors = pr.picker.getMainColors();
       const splashColors = pr.picker.getSplashColors();
+      const archetypeVal = pr.archetypeCombo.getValue();
+      const archetype = archetypeVal.mode === "empty" ? "" : archetypeVal.name.trim();
 
-      if (val.mode === "empty" && mainColors.length === 0 && splashColors.length === 0) return; // blank row, ignored
+      if (val.mode === "empty" && mainColors.length === 0 && splashColors.length === 0 && !archetype) return; // blank row, ignored
 
       if (val.mode === "empty") {
-        errors.push(`Row ${idx + 1}: you selected colors but didn't enter a name.`);
+        errors.push(`Row ${idx + 1}: you selected colors or an archetype but didn't enter a name.`);
         return;
       }
       if (mainColors.length === 0) {
@@ -177,6 +205,7 @@
       result.push({
         name: val.name.trim(),
         colors: mainColors,
+        archetype,
         splash: splashColors,
         existingId: val.mode === "existing" ? val.id : null,
       });
@@ -411,6 +440,8 @@
             colorsB: pB.colors,
             splashA: pA.splash,
             splashB: pB.splash,
+            archetypeA: pA.archetype,
+            archetypeB: pB.archetype,
             note: "",
           });
         });
@@ -424,6 +455,8 @@
         `Tournament on ${tournamentDate}: ${newMatches.length} matches, ${roundsCount} rounds`,
         matchesSha
       );
+
+      archetypeItems = buildArchetypeItems(updatedMatches);
 
       showMsg(
         step2Msg,
@@ -460,6 +493,7 @@
     try {
       const data = await EloApp.loadData();
       players = data.players;
+      archetypeItems = buildArchetypeItems(data.matches);
       for (let i = 0; i < 8; i++) addParticipantRow();
       if (players.length === 0) {
         showMsg(

@@ -24,11 +24,18 @@ tutto il torneo. Il form **Nuovo Torneo** rispecchia questo:
 1. **Partecipanti**: scrivi il nome di ognuno (una casella con suggerimenti —
    se il nome esiste già te lo propone, altrimenti verrà creato un nuovo
    giocatore automaticamente) e scegli i colori del suo mazzo, una volta sola
-   per tutto il torneo: **colori principali** (da 1 a 5) e, se vuoi, fino a
-   2 **colori di splash** (colori giocati "in prestito", diversi dai
-   principali — es. mazzo Blu-Nero con uno splash di Bianco). Righe libere
-   da aggiungere/rimuovere: tipicamente 8, ma vanno bene anche 6, 10 o
-   qualsiasi numero.
+   per tutto il torneo: **colori principali** (da 1 a 5), fino a 2 **colori
+   di splash** (colori giocati "in prestito", diversi dai principali — es.
+   mazzo Blu-Nero con uno splash di Bianco), e un **archetipo** opzionale
+   (Aggro, Control, Midrange, Combo, Reanimator...). Anche l'archetipo
+   funziona con suggerimenti standardizzati come i nomi dei giocatori — se
+   scrivi "agro" ti propone comunque "Aggro" già usato in precedenza, anche
+   con un piccolo errore di battitura — così non finisci con dieci varianti
+   diverse dello stesso archetipo. La lista di partenza è in
+   `assets/js/config.js` (`DEFAULT_ARCHETYPES`), modificabile a piacere; ogni
+   nuovo archetipo scritto durante l'inserimento entra automaticamente nei
+   suggerimenti futuri. Righe libere da aggiungere/rimuovere: tipicamente 8,
+   ma vanno bene anche 6, 10 o qualsiasi numero.
 2. **Risultati**: per ogni turno inserisci i vari incontri (giocatore A vs
    giocatore B) e il punteggio di ciascuno, come prima.
 3. Un solo click salva tutto il torneo in blocco (uno o due commit in tutto,
