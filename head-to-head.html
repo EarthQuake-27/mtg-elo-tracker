@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Head to Head – Playgroup Elo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=5">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
+    <div class="nav-links">
+      <a href="index.html">Standings</a>
+      <a href="players.html">Players</a>
+      <a href="head-to-head.html" class="active">Head to Head</a>
+      <a href="new-tournament.html">New Tournament</a>
+      <a href="settings.html">Settings</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Head to Head</h1>
+  <p class="subtitle">Pick two players to see their record against each other.</p>
+
+  <div id="msg-area"></div>
+
+  <div class="card">
+    <div class="form-row">
+      <div>
+        <label for="player-a-select">Player A</label>
+        <select id="player-a-select"></select>
+      </div>
+      <div>
+        <label for="player-b-select">Player B</label>
+        <select id="player-b-select"></select>
+      </div>
+    </div>
+  </div>
+
+  <div id="h2h-empty" class="card">
+    <p class="empty-state">Pick two different players above to see their head-to-head record.</p>
+  </div>
+
+  <div id="h2h-content" hidden>
+    <h2 id="h2h-title">—</h2>
+
+    <div class="stat-grid">
+      <div class="stat-tile"><div class="label" id="h2h-a-name-label">Player A</div><div class="value" id="h2h-a-elo">—</div></div>
+      <div class="stat-tile"><div class="label" id="h2h-b-name-label">Player B</div><div class="value" id="h2h-b-elo">—</div></div>
+      <div class="stat-tile"><div class="label">Matches</div><div class="value" id="h2h-matches">—</div></div>
+      <div class="stat-tile"><div class="label" id="h2h-record-label">Record (A-D-B)</div><div class="value" id="h2h-record">—</div></div>
+      <div class="stat-tile"><div class="label" id="h2h-winrate-label">A win rate</div><div class="value" id="h2h-winrate">—</div></div>
+      <div class="stat-tile"><div class="label">Games (A-B)</div><div class="value" id="h2h-games">—</div></div>
+    </div>
+
+    <div class="card">
+      <div id="h2h-record-bar"></div>
+    </div>
+
+    <h2>Match History</h2>
+    <div class="card">
+      <div class="table-scroll">
+        <table id="h2h-matches-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Score</th>
+              <th id="h2h-a-deck-header">A's deck</th>
+              <th id="h2h-b-deck-header">B's deck</th>
+              <th class="num">Δ Elo (A / B)</th>
+            </tr>
+          </thead>
+          <tbody id="h2h-matches-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/config.js?v=5"></script>
+<script src="assets/js/elo.js?v=5"></script>
+<script src="assets/js/data.js?v=5"></script>
+<script src="assets/js/github-api.js?v=5"></script>
+<script src="assets/js/ui-helpers.js?v=5"></script>
+<script src="assets/js/page-head-to-head.js?v=5"></script>
+</body>
+</html>

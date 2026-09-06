@@ -70,6 +70,7 @@ ovunque il torneo viene mostrato compare solo la data):
 index.html          → Classifica generale
 players.html         → Elenco giocatori + form per aggiungerne di nuovi
 player.html          → Statistiche individuali (?id=...)
+head-to-head.html     → Scontri diretti tra due giocatori (?a=id&b=id)
 new-tournament.html   → Form per registrare un nuovo torneo (partecipanti + risultati turno per turno)
 settings.html        → Configurazione del token GitHub (solo per chi inserisce i dati)
 assets/css/style.css  → Stile del sito

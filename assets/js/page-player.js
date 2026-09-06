@@ -5,42 +5,10 @@
 
   const msgArea = document.getElementById("msg-area");
   const content = document.getElementById("player-content");
-
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
-  }
+  const { escapeHtml, colorPips, archetypeLine, statBar } = EloApp;
 
   function showError(text) {
     msgArea.innerHTML = `<div class="msg error">${text}</div>`;
-  }
-
-  function colorPips(mainColors, splashColors) {
-    const main = mainColors || [];
-    const splash = splashColors || [];
-    if (main.length === 0 && splash.length === 0) return '<span class="pip-row">—</span>';
-    const pip = (c, isSplash) => {
-      const meta = EloApp.COLOR_META[c];
-      if (!meta) return "";
-      const title = isSplash ? `${meta.name} (splash)` : meta.name;
-      return `<span class="pip${isSplash ? " splash" : ""}" title="${title}">${EloApp.colorIconSvg(c)}</span>`;
-    };
-    return (
-      '<span class="pip-row">' +
-      main.map((c) => pip(c, false)).join("") +
-      splash.map((c) => pip(c, true)).join("") +
-      "</span>"
-    );
-  }
-
-  function statBar(segments) {
-    // segments: [{ pct, color, label }]
-    const fills = segments
-      .filter((s) => s.pct > 0)
-      .map((s) => `<div class="fill" style="width:${s.pct}%; background:${s.color};" title="${s.label}: ${Math.round(s.pct)}%"></div>`)
-      .join("");
-    return `<div class="track">${fills}</div>`;
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -198,16 +166,6 @@
           const oppSplash = isA ? m.splashB : m.splashA;
           const myArchetypes = isA ? m.archetypesA : m.archetypesB;
           const oppArchetypes = isA ? m.archetypesB : m.archetypesA;
-          const archetypeLine = (list) =>
-            list && list.length
-              ? `<div style="font-size:.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(list.join(" + "))}</div>`
-              : "";
-          const badge =
-            myScore > oppScore
-              ? '<span class="badge win">Win</span>'
-              : myScore < oppScore
-              ? '<span class="badge loss">Loss</span>'
-              : '<span class="badge draw">Draw</span>';
           const roundPart = m.round ? `Round ${m.round}` : "";
           const namePart = m.tournamentName ? escapeHtml(m.tournamentName) : "";
           const suffix = [namePart, roundPart].filter(Boolean).join(" · ");
@@ -216,10 +174,10 @@
           return `<tr>
             <td>${dateLabel}</td>
             <td><a href="player.html?id=${encodeURIComponent(oppId)}">${escapeHtml(oppName)}</a></td>
-            <td>${myScore}-${oppScore} ${badge}</td>
+            <td>${myScore}-${oppScore} ${EloApp.resultBadge(myScore, oppScore)}</td>
             <td>${colorPips(myColors, mySplash)}${archetypeLine(myArchetypes)}</td>
             <td>${colorPips(oppColors, oppSplash)}${archetypeLine(oppArchetypes)}</td>
-            <td class="num"><span class="${delta >= 0 ? "delta-pos" : "delta-neg"}">${delta >= 0 ? "+" : ""}${delta.toFixed(1)}</span></td>
+            <td class="num">${EloApp.eloDelta(delta)}</td>
           </tr>`;
         })
         .join("");
