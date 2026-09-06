@@ -8,6 +8,7 @@
   const msgArea = document.getElementById("msg-area");
   const rankingBody = document.getElementById("ranking-body");
   const recentBody = document.getElementById("recent-body");
+  const latestTournamentSubtitle = document.getElementById("latest-tournament-subtitle");
 
   function showError(err) {
     msgArea.innerHTML = `<div class="msg error">${err.message || err}</div>`;
@@ -18,16 +19,40 @@
   }
 
   function outcomeBadge(sa) {
-    if (sa === 1) return '<span class="badge win">V</span>';
-    if (sa === 0) return '<span class="badge loss">S</span>';
-    return '<span class="badge draw">P</span>';
+    if (sa === 1) return '<span class="badge win">W</span>';
+    if (sa === 0) return '<span class="badge loss">L</span>';
+    return '<span class="badge draw">D</span>';
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /** Groups the flat match log into tournaments (matches without a
+   *  tournamentId are treated as a one-round tournament of their own),
+   *  and returns the most recently played one. */
+  function findLatestTournament(matchLog) {
+    if (matchLog.length === 0) return null;
+    const groups = new Map();
+    matchLog.forEach((m) => {
+      const key = m.tournamentId || `standalone:${m.id}`;
+      if (!groups.has(key)) groups.set(key, { key, date: m.date, matches: [] });
+      groups.get(key).matches.push(m);
+      if (m.date > groups.get(key).date) groups.get(key).date = m.date;
+    });
+    const tournaments = Array.from(groups.values()).sort((a, b) => new Date(b.date) - new Date(a.date));
+    const latest = tournaments[0];
+    latest.matches.sort((a, b) => (a.round || 0) - (b.round || 0));
+    return latest;
   }
 
   try {
     const { players, matches } = await EloApp.loadData();
 
     if (players.length === 0) {
-      rankingBody.innerHTML = `<tr><td colspan="6" class="empty-state">Nessun giocatore ancora. <a href="players.html">Aggiungine uno</a>.</td></tr>`;
+      rankingBody.innerHTML = `<tr><td colspan="6" class="empty-state">No players yet. <a href="players.html">Add one</a>.</td></tr>`;
     } else {
       const { standings, matchLog } = EloApp.computeStandings(players, matches, cfg);
 
@@ -47,17 +72,19 @@
         })
         .join("");
 
-      if (matchLog.length === 0) {
-        recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Nessuna partita registrata ancora. <a href="new-tournament.html">Aggiungine una</a>.</td></tr>`;
+      const latest = findLatestTournament(matchLog);
+      if (!latest) {
+        latestTournamentSubtitle.textContent = "";
+        recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">No tournament recorded yet. <a href="new-tournament.html">Add one</a>.</td></tr>`;
       } else {
-        const recent = [...matchLog].reverse().slice(0, 15);
-        recentBody.innerHTML = recent
+        latestTournamentSubtitle.textContent = `Played on ${latest.date}`;
+        recentBody.innerHTML = latest.matches
           .map((m) => {
             const sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;
             const sb = 1 - sa;
-            const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· T${m.round}</span>` : m.date;
+            const roundLabel = m.round ? `Round ${m.round}` : "—";
             return `<tr>
-              <td>${dateLabel}</td>
+              <td>${roundLabel}</td>
               <td><a href="player.html?id=${encodeURIComponent(m.playerA)}">${escapeHtml(m.nameA)}</a> ${outcomeBadge(sa)} vs ${outcomeBadge(sb)} <a href="player.html?id=${encodeURIComponent(m.playerB)}">${escapeHtml(m.nameB)}</a></td>
               <td>${m.scoreA} - ${m.scoreB}</td>
               <td class="num">
@@ -72,13 +99,7 @@
     }
   } catch (err) {
     showError(err);
-    rankingBody.innerHTML = `<tr><td colspan="6" class="empty-state">Errore nel caricamento dati.</td></tr>`;
-    recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Errore nel caricamento dati.</td></tr>`;
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+    rankingBody.innerHTML = `<tr><td colspan="6" class="empty-state">Error loading data.</td></tr>`;
+    recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Error loading data.</td></tr>`;
   }
 })();

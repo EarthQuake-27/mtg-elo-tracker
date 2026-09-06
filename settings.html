@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Impostazioni – Elo del Gruppo</title>
+<title>Settings – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -11,23 +11,23 @@
 
 <nav class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
     <div class="nav-links">
-      <a href="index.html">Classifica</a>
-      <a href="players.html">Giocatori</a>
-      <a href="new-tournament.html">Nuovo Torneo</a>
-      <a href="settings.html" class="active">Impostazioni</a>
+      <a href="index.html">Standings</a>
+      <a href="players.html">Players</a>
+      <a href="new-tournament.html">New Tournament</a>
+      <a href="settings.html" class="active">Settings</a>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <h1>Impostazioni</h1>
-  <p class="subtitle">Configura qui il token GitHub che permette a questo browser di salvare nuove partite e nuovi giocatori. Serve solo a chi inserisce i dati (tipicamente solo a te) — chi consulta il sito non ne ha bisogno.</p>
+  <h1>Settings</h1>
+  <p class="subtitle">Configure the GitHub token that lets this browser save new tournaments and players. Only needed by whoever enters the data (typically just you) — visitors don't need it.</p>
 
   <div class="card">
-    <h2 style="margin-top:0;">Token di accesso GitHub</h2>
-    <p>Il token viene salvato <strong>solo nel localStorage di questo browser</strong>, su questo dispositivo. Non viene mai condiviso con nessuno se non con le API ufficiali di GitHub. Non inserirlo su computer condivisi o pubblici.</p>
+    <h2 style="margin-top:0;">GitHub access token</h2>
+    <p>The token is saved <strong>only in this browser's localStorage</strong>, on this device. It is never shared with anyone except GitHub's official API. Don't enter it on shared or public computers.</p>
 
     <label for="gh-token">Personal Access Token</label>
     <input type="password" id="gh-token" placeholder="github_pat_xxx...">
@@ -35,22 +35,22 @@
     <div id="settings-msg"></div>
 
     <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="btn" id="save-token-btn">Salva token</button>
-      <button class="btn secondary" id="test-token-btn">Verifica connessione</button>
-      <button class="btn danger" id="clear-token-btn">Rimuovi token</button>
+      <button class="btn" id="save-token-btn">Save token</button>
+      <button class="btn secondary" id="test-token-btn">Test connection</button>
+      <button class="btn danger" id="clear-token-btn">Remove token</button>
     </div>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0;">Come creare il token (una tantum)</h2>
+    <h2 style="margin-top:0;">How to create the token (one time)</h2>
     <ol>
-      <li>Vai su <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (token "fine-grained", più sicuri di quelli classici).</li>
-      <li>In <strong>"Repository access"</strong> scegli <strong>"Only select repositories"</strong> e seleziona solo il repository di questo sito (es. <code>mtg-elo-tracker</code>).</li>
-      <li>In <strong>"Permissions" → "Repository permissions"</strong> imposta <strong>"Contents"</strong> su <strong>"Read and write"</strong>. Lascia tutto il resto disattivato.</li>
-      <li>Genera il token e copialo (GitHub lo mostra una sola volta).</li>
-      <li>Incollalo qui sopra e premi <strong>"Salva token"</strong>, poi <strong>"Verifica connessione"</strong>.</li>
+      <li>Go to <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> ("fine-grained" tokens, safer than classic ones).</li>
+      <li>Under <strong>"Repository access"</strong> choose <strong>"Only select repositories"</strong> and pick only this site's repository (e.g. <code>mtg-elo-tracker</code>).</li>
+      <li>Under <strong>"Permissions" → "Repository permissions"</strong> set <strong>"Contents"</strong> to <strong>"Read and write"</strong>. Leave everything else off.</li>
+      <li>Generate the token and copy it right away (GitHub only shows it once).</li>
+      <li>Paste it above and click <strong>"Save token"</strong>, then <strong>"Test connection"</strong>.</li>
     </ol>
-    <p class="footer-note" style="text-align:left;">Assicurati di aver prima modificato <code>assets/js/config.js</code> con il tuo username GitHub e il nome del repository, altrimenti la verifica fallirà.</p>
+    <p class="footer-note" style="text-align:left;">Make sure you've already edited <code>assets/js/config.js</code> with your GitHub username and the repository name, otherwise the test will fail.</p>
   </div>
 </div>
 

@@ -1,15 +1,15 @@
 /**
- * Caricamento dei dati (giocatori e partite) dai file JSON del sito.
- * Nota: se apri i file .html direttamente dal Finder (protocollo file://)
- * il browser blocca queste fetch per motivi di sicurezza (CORS). Per
- * testare in locale serve un piccolo server statico (vedi README.md).
- * Su GitHub Pages funziona tutto automaticamente.
+ * Loads the data (players and matches) from the site's JSON files.
+ * Note: if you open the .html files directly from Finder (file://
+ * protocol) the browser blocks these fetches for security reasons (CORS).
+ * To test locally you need a small static server (see README.md). On
+ * GitHub Pages everything works automatically.
  */
 (function (window) {
   async function fetchJson(path) {
     const res = await fetch(path, { cache: "no-store" });
     if (!res.ok) {
-      throw new Error(`Impossibile caricare ${path} (status ${res.status})`);
+      throw new Error(`Could not load ${path} (status ${res.status})`);
     }
     return res.json();
   }

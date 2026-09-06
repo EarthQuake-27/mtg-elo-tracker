@@ -1,7 +1,6 @@
 /**
- * Piccolo grafico a linee per l'andamento dell'Elo, disegnato come SVG puro
- * (nessuna libreria esterna: niente da scaricare, niente da tenere
- * aggiornato, funziona anche offline).
+ * Small line chart for Elo over time, drawn as plain SVG (no external
+ * library: nothing to download, nothing to keep updated, works offline).
  */
 (function (window) {
   function renderEloChart(container, history) {
@@ -44,15 +43,15 @@
     const dots = points
       .map(
         (p) =>
-          `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" class="chart-dot"><title>${p.h.date || "Inizio"}: ${Math.round(p.h.elo)}</title></circle>`
+          `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" class="chart-dot"><title>${p.h.date || "Start"}: ${Math.round(p.h.elo)}</title></circle>`
       )
       .join("");
 
-    const firstLabel = history[0].date || "Inizio";
+    const firstLabel = history[0].date || "Start";
     const lastLabel = history[history.length - 1].date || "";
 
     container.innerHTML = `
-      <svg viewBox="0 0 ${W} ${H}" class="elo-chart-svg" preserveAspectRatio="none" role="img" aria-label="Andamento Elo nel tempo">
+      <svg viewBox="0 0 ${W} ${H}" class="elo-chart-svg" preserveAspectRatio="none" role="img" aria-label="Elo over time">
         ${gridLines}
         <path d="${areaPath}" class="chart-area" />
         <path d="${linePath}" class="chart-line" />

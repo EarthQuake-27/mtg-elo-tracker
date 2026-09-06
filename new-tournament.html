@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nuovo Torneo – Elo del Gruppo</title>
+<title>New Tournament – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -11,65 +11,65 @@
 
 <nav class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
     <div class="nav-links">
-      <a href="index.html">Classifica</a>
-      <a href="players.html">Giocatori</a>
-      <a href="new-tournament.html" class="active">Nuovo Torneo</a>
-      <a href="settings.html">Impostazioni</a>
+      <a href="index.html">Standings</a>
+      <a href="players.html">Players</a>
+      <a href="new-tournament.html" class="active">New Tournament</a>
+      <a href="settings.html">Settings</a>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <h1>Registra un nuovo torneo</h1>
-  <p class="subtitle">Prima i partecipanti e i loro mazzi (fissi per tutto il torneo), poi i risultati turno per turno.</p>
+  <h1>Record a new tournament</h1>
+  <p class="subtitle">First the participants and their decks (fixed for the whole tournament), then the results round by round.</p>
 
   <div id="msg-area"></div>
 
-  <!-- STEP 1: partecipanti e mazzi -->
+  <!-- STEP 1: participants and decks -->
   <div id="step-1">
     <div class="card">
       <div class="form-row">
         <div>
-          <label for="tournament-date">Data del torneo</label>
+          <label for="tournament-date">Tournament date</label>
           <input type="date" id="tournament-date" required>
         </div>
         <div>
-          <label for="rounds-count">Numero di turni</label>
+          <label for="rounds-count">Number of rounds</label>
           <input type="text" inputmode="numeric" id="rounds-count" value="3">
         </div>
       </div>
     </div>
 
-    <h2>Partecipanti</h2>
+    <h2>Participants</h2>
     <div class="card">
       <div id="participants-list"></div>
       <div style="margin-top:16px;">
-        <button type="button" class="btn secondary" id="add-participant-btn">+ Aggiungi giocatore</button>
+        <button type="button" class="btn secondary" id="add-participant-btn">+ Add player</button>
       </div>
     </div>
 
     <div id="step1-msg"></div>
 
     <div class="step-nav">
-      <button type="button" class="btn" id="to-step2-btn">Avanti: inserisci risultati →</button>
+      <button type="button" class="btn" id="to-step2-btn">Next: enter results →</button>
     </div>
   </div>
 
-  <!-- STEP 2: risultati turno per turno -->
+  <!-- STEP 2: round-by-round results -->
   <div id="step-2" hidden>
     <div id="rounds-container"></div>
 
     <div id="step2-msg"></div>
 
     <div class="step-nav">
-      <button type="button" class="btn secondary" id="back-to-step1-btn">← Torna ai partecipanti</button>
-      <button type="button" class="btn" id="save-tournament-btn">Salva torneo</button>
+      <button type="button" class="btn secondary" id="back-to-step1-btn">← Back to participants</button>
+      <button type="button" class="btn" id="save-tournament-btn">Save tournament</button>
     </div>
   </div>
 
-  <p class="footer-note">Serve un token GitHub configurato in <a href="settings.html">Impostazioni</a> per poter salvare.</p>
+  <p class="footer-note">A GitHub token configured in <a href="settings.html">Settings</a> is required to save.</p>
 </div>
 
 <script src="assets/js/config.js"></script>

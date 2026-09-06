@@ -1,24 +1,24 @@
 /**
- * Motore di calcolo Elo. Puro JS, nessuna dipendenza.
+ * Elo calculation engine. Pure JS, no dependencies.
  *
- * Regole:
- * - Punteggio partita: vittoria = 1, pareggio (1-1 o 0-0) = 0.5, sconfitta = 0.
- * - K-factor standard (CONFIG.BASE_K), ridotto al 90% (SINGLE_GAME_K_MULTIPLIER)
- *   quando il match è finito 1-0 / 0-1 (una sola partita giocata, meno
- *   rappresentativo di un Bo3 completo).
- * - L'Elo NON viene salvato: viene sempre ricalcolato da zero replicando
- *   tutto lo storico partite in ordine cronologico. Questo garantisce che
- *   classifica e statistiche siano sempre coerenti con data/matches.json.
+ * Rules:
+ * - Match score: win = 1, draw (1-1 or 0-0) = 0.5, loss = 0.
+ * - Standard K-factor (CONFIG.BASE_K), reduced to 90%
+ *   (SINGLE_GAME_K_MULTIPLIER) when a match ends 1-0 / 0-1 (a single game
+ *   played, less representative than a full Bo3).
+ * - Elo is NEVER stored: it is always recomputed from scratch by replaying
+ *   the whole match history in chronological order. This guarantees that
+ *   the standings and stats are always consistent with data/matches.json.
  */
 (function (window) {
   const COLORS = ["W", "U", "B", "R", "G"];
 
   const COLOR_META = {
-    W: { name: "Bianco", hex: "#f8f6d8", text: "#3a3a2a" },
-    U: { name: "Blu", hex: "#0e68ab", text: "#ffffff" },
-    B: { name: "Nero", hex: "#26221f", text: "#ffffff" },
-    R: { name: "Rosso", hex: "#d3202a", text: "#ffffff" },
-    G: { name: "Verde", hex: "#00733e", text: "#ffffff" },
+    W: { name: "White", hex: "#f8f6d8", text: "#3a3a2a" },
+    U: { name: "Blue", hex: "#0e68ab", text: "#ffffff" },
+    B: { name: "Black", hex: "#26221f", text: "#ffffff" },
+    R: { name: "Red", hex: "#d3202a", text: "#ffffff" },
+    G: { name: "Green", hex: "#00733e", text: "#ffffff" },
   };
 
   function expectedScore(ra, rb) {
@@ -51,47 +51,8 @@
   }
 
   /**
-   * Le statistiche sui colori vanno calcolate per MAZZO, non per partita:
-   * in un torneo lo stesso giocatore usa lo stesso mazzo per più turni, e
-   * contare i colori una volta per turno lo peserebbe artificialmente di
-   * più di un giocatore che ha fatto un solo turno con quel mazzo.
-   *
-   * Un "mazzo" è identificato da (tournamentId, playerId); le partite senza
-   * tournamentId (storiche, inserite una alla volta) contano ciascuna come
-   * un mazzo a sé.
-   */
-  function computeDeckStats(playerId, matches) {
-    const deckMap = new Map();
-
-    matches.forEach((m) => {
-      let colors = null;
-      if (m.playerA === playerId) colors = m.colorsA;
-      else if (m.playerB === playerId) colors = m.colorsB;
-      else return;
-
-      const key = m.tournamentId ? `t:${m.tournamentId}` : `m:${m.id}`;
-      if (!deckMap.has(key)) deckMap.set(key, Array.from(new Set(colors || [])));
-    });
-
-    const decks = Array.from(deckMap.values());
-    const totalDecks = decks.length;
-    const colorPresence = emptyColorCounts();
-    const colorCountHist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-
-    decks.forEach((colors) => {
-      colors.forEach((c) => {
-        if (colorPresence[c] != null) colorPresence[c]++;
-      });
-      const n = Math.min(colors.length, 5);
-      colorCountHist[n]++;
-    });
-
-    return { totalDecks, colorPresence, colorCountHist };
-  }
-
-  /**
-   * Ricalcola classifica, statistiche e storico Elo per ogni giocatore
-   * a partire dall'elenco giocatori e dallo storico partite.
+   * Recomputes standings, stats and Elo history for every player from the
+   * player list and the match history.
    */
   function computeStandings(players, matches, cfg) {
     const statsById = {};
@@ -174,6 +135,68 @@
     const standings = Object.values(statsById).sort((a, b) => b.elo - a.elo);
 
     return { standings, matchLog, skipped };
+  }
+
+  /**
+   * Deck stats must be computed per DECK, not per game: in a tournament the
+   * same player uses the same deck across several rounds, and counting
+   * colors once per round would weight that deck more heavily than a
+   * player who only played one round with theirs.
+   *
+   * A "deck" is identified by (tournamentId, playerId); matches without a
+   * tournamentId (legacy, entered one at a time) each count as their own
+   * deck.
+   *
+   * Splash colors are tracked separately from main colors: the "colors per
+   * deck" distribution (mono/2-color/3-color/...) is based on main colors
+   * only, so a 2-color deck with a splash is still counted as a 2-color
+   * deck, distinct from an actual 3-color deck.
+   */
+  function computeDeckStats(playerId, matches) {
+    const deckMap = new Map();
+
+    matches.forEach((m) => {
+      let main = null;
+      let splash = null;
+      if (m.playerA === playerId) {
+        main = m.colorsA;
+        splash = m.splashA;
+      } else if (m.playerB === playerId) {
+        main = m.colorsB;
+        splash = m.splashB;
+      } else {
+        return;
+      }
+
+      const key = m.tournamentId ? `t:${m.tournamentId}` : `m:${m.id}`;
+      if (!deckMap.has(key)) {
+        deckMap.set(key, {
+          main: Array.from(new Set(main || [])),
+          splash: Array.from(new Set(splash || [])),
+        });
+      }
+    });
+
+    const decks = Array.from(deckMap.values());
+    const totalDecks = decks.length;
+    const colorPresenceMain = emptyColorCounts();
+    const colorPresenceSplash = emptyColorCounts();
+    const colorCountHist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let splashDeckCount = 0;
+
+    decks.forEach(({ main, splash }) => {
+      main.forEach((c) => {
+        if (colorPresenceMain[c] != null) colorPresenceMain[c]++;
+      });
+      splash.forEach((c) => {
+        if (colorPresenceSplash[c] != null) colorPresenceSplash[c]++;
+      });
+      if (splash.length > 0) splashDeckCount++;
+      const n = Math.min(main.length, 5);
+      colorCountHist[n]++;
+    });
+
+    return { totalDecks, colorPresenceMain, colorPresenceSplash, colorCountHist, splashDeckCount };
   }
 
   window.EloApp.COLORS = COLORS;

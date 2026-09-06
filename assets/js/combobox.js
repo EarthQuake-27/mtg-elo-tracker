@@ -1,10 +1,9 @@
 /**
- * Campo di testo con suggerimenti a tendina per scegliere un giocatore
- * esistente o, se il nome digitato non corrisponde a nessuno, crearne uno
- * nuovo al volo. Sostituisce <datalist>, che su Safari ha un supporto
- * incoerente.
+ * Text field with a dropdown of suggestions for picking an existing player
+ * or, if the typed name matches none, creating a new one on the fly.
+ * Replaces <datalist>, which has inconsistent support on Safari.
  *
- * Uso:
+ * Usage:
  *   const box = EloApp.createPlayerCombobox(container, players);
  *   box.getValue() -> { mode: "empty" } | { mode: "existing", id, name } | { mode: "new", name }
  */
@@ -13,7 +12,7 @@
     opts = opts || {};
     container.classList.add("combobox");
     container.innerHTML = `
-      <input type="text" class="combobox-input" autocomplete="off" placeholder="${opts.placeholder || "Nome giocatore"}">
+      <input type="text" class="combobox-input" autocomplete="off" placeholder="${opts.placeholder || "Player name"}">
       <div class="combobox-list" hidden></div>
       <div class="combobox-hint"></div>
     `;
@@ -30,9 +29,9 @@
 
     function updateHint() {
       if (resolved.mode === "existing") {
-        hint.innerHTML = `<span class="hint-existing">✓ giocatore esistente</span>`;
+        hint.innerHTML = `<span class="hint-existing">✓ existing player</span>`;
       } else if (resolved.mode === "new") {
-        hint.innerHTML = `<span class="hint-new">+ nuovo giocatore</span>`;
+        hint.innerHTML = `<span class="hint-new">+ new player</span>`;
       } else {
         hint.innerHTML = "";
       }
@@ -64,11 +63,11 @@
         .join("");
 
       if (query && !exact) {
-        html += `<div class="combobox-item combobox-item-new" data-new="1">+ Crea nuovo giocatore "${escapeHtml(input.value.trim())}"</div>`;
+        html += `<div class="combobox-item combobox-item-new" data-new="1">+ Create new player "${escapeHtml(input.value.trim())}"</div>`;
       }
 
       if (!html) {
-        html = `<div class="combobox-item combobox-empty">Nessun giocatore. Scrivi un nome per crearne uno.</div>`;
+        html = `<div class="combobox-item combobox-empty">No players yet. Type a name to create one.</div>`;
       }
 
       list.innerHTML = html;
@@ -89,7 +88,7 @@
     input.addEventListener("focus", renderList);
 
     input.addEventListener("blur", () => {
-      // Ritarda la chiusura per permettere il click sull'elemento della lista.
+      // Delay closing so a click on a list item can register first.
       setTimeout(() => {
         list.hidden = true;
         resolveFromInput();

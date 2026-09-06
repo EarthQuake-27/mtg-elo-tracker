@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Statistiche giocatore – Elo del Gruppo</title>
+<title>Player Stats – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -11,12 +11,12 @@
 
 <nav class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
     <div class="nav-links">
-      <a href="index.html">Classifica</a>
-      <a href="players.html" class="active">Giocatori</a>
-      <a href="new-tournament.html">Nuovo Torneo</a>
-      <a href="settings.html">Impostazioni</a>
+      <a href="index.html">Standings</a>
+      <a href="players.html" class="active">Players</a>
+      <a href="new-tournament.html">New Tournament</a>
+      <a href="settings.html">Settings</a>
     </div>
   </div>
 </nav>
@@ -29,37 +29,43 @@
     <p class="subtitle" id="player-subtitle">—</p>
 
     <div class="stat-grid">
-      <div class="stat-tile"><div class="label">Elo attuale</div><div class="value" id="stat-elo">—</div></div>
-      <div class="stat-tile"><div class="label">Posizione</div><div class="value" id="stat-rank">—</div></div>
-      <div class="stat-tile"><div class="label">Partite</div><div class="value" id="stat-matches">—</div></div>
-      <div class="stat-tile"><div class="label">V - P - S</div><div class="value" id="stat-record">—</div></div>
-      <div class="stat-tile"><div class="label">% Vittorie</div><div class="value" id="stat-winrate">—</div></div>
-      <div class="stat-tile"><div class="label">Game (V-S)</div><div class="value" id="stat-games">—</div></div>
+      <div class="stat-tile"><div class="label">Current Elo</div><div class="value" id="stat-elo">—</div></div>
+      <div class="stat-tile"><div class="label">Rank</div><div class="value" id="stat-rank">—</div></div>
+      <div class="stat-tile"><div class="label">Matches</div><div class="value" id="stat-matches">—</div></div>
+      <div class="stat-tile"><div class="label">W - D - L</div><div class="value" id="stat-record">—</div></div>
+      <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="stat-winrate">—</div></div>
+      <div class="stat-tile"><div class="label">Games (W-L)</div><div class="value" id="stat-games">—</div></div>
+      <div class="stat-tile"><div class="label">Splash rate</div><div class="value" id="stat-splashrate">—</div></div>
     </div>
 
-    <h2>Andamento Elo</h2>
+    <div class="card">
+      <div id="record-bar"></div>
+    </div>
+
+    <h2>Elo Over Time</h2>
     <div class="card">
       <div id="elo-chart"></div>
     </div>
 
-    <h2>Colori giocati</h2>
+    <h2>Colors Played</h2>
     <p class="subtitle" id="deck-count-note"></p>
     <div class="card" id="color-usage-card"></div>
 
-    <h2>Quanti colori per mazzo</h2>
+    <h2>Colors per Deck</h2>
+    <p class="subtitle">How many colors the deck's main colors used, and how often a splash was added (based on main colors only, so a 2-color deck with a splash still counts as 2-color).</p>
     <div class="card" id="color-dist-card"></div>
 
-    <h2>Storico partite</h2>
+    <h2>Match History</h2>
     <div class="card">
       <div class="table-scroll">
         <table id="matches-table">
           <thead>
             <tr>
-              <th>Data</th>
-              <th>Avversario</th>
-              <th>Risultato</th>
-              <th>Mazzo</th>
-              <th>Mazzo avversario</th>
+              <th>Date</th>
+              <th>Opponent</th>
+              <th>Result</th>
+              <th>Deck</th>
+              <th>Opponent's Deck</th>
               <th class="num">Δ Elo</th>
             </tr>
           </thead>

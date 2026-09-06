@@ -11,6 +11,10 @@ JSON dentro questo stesso repository (`data/players.json` e
 `data/matches.json`), e l'Elo viene ricalcolato al volo nel browser ogni
 volta che qualcuno apre il sito.
 
+> Nota: **il sito pubblicato è in inglese** (per essere facilmente
+> condivisibile con chiunque nel gruppo). Questo file README, che è la tua
+> guida personale per pubblicarlo e mantenerlo, resta in italiano.
+
 ## Come si registra un torneo
 
 Le partite del gruppo non sono mai "una tantum": si gioca sempre in mini-tornei
@@ -20,8 +24,11 @@ tutto il torneo. Il form **Nuovo Torneo** rispecchia questo:
 1. **Partecipanti**: scrivi il nome di ognuno (una casella con suggerimenti —
    se il nome esiste già te lo propone, altrimenti verrà creato un nuovo
    giocatore automaticamente) e scegli i colori del suo mazzo, una volta sola
-   per tutto il torneo. Righe libere da aggiungere/rimuovere: tipicamente 8,
-   ma vanno bene anche 6, 10 o qualsiasi numero.
+   per tutto il torneo: **colori principali** (da 1 a 5) e, se vuoi, fino a
+   2 **colori di splash** (colori giocati "in prestito", diversi dai
+   principali — es. mazzo Blu-Nero con uno splash di Bianco). Righe libere
+   da aggiungere/rimuovere: tipicamente 8, ma vanno bene anche 6, 10 o
+   qualsiasi numero.
 2. **Risultati**: per ogni turno inserisci i vari incontri (giocatore A vs
    giocatore B) e il punteggio di ciascuno, come prima.
 3. Un solo click salva tutto il torneo in blocco (uno o due commit in tutto,
@@ -29,7 +36,7 @@ tutto il torneo. Il form **Nuovo Torneo** rispecchia questo:
 
 ## Come funziona il calcolo dell'Elo
 
-- Ogni nuovo giocatore parte da **1200** punti Elo (modificabile in
+- Ogni nuovo giocatore parte da **1000** punti Elo (modificabile in
   `assets/js/config.js`).
 - Ogni match vale come **una partita di scacchi**: chi vince guadagna punti,
   chi perde ne perde, in base alla differenza di Elo attesa.

@@ -24,16 +24,14 @@
   }
 
   let cachedPlayers = [];
-  let cachedMatches = [];
 
   async function render() {
     try {
       const { players, matches } = await EloApp.loadData();
       cachedPlayers = players;
-      cachedMatches = matches;
 
       if (players.length === 0) {
-        playersBody.innerHTML = `<tr><td colspan="4" class="empty-state">Nessun giocatore ancora. Aggiungine uno qui sotto.</td></tr>`;
+        playersBody.innerHTML = `<tr><td colspan="4" class="empty-state">No players yet. Add one below.</td></tr>`;
         return;
       }
 
@@ -50,7 +48,7 @@
         .join("");
     } catch (err) {
       showMsg(msgArea, "error", err.message || err);
-      playersBody.innerHTML = `<tr><td colspan="4" class="empty-state">Errore nel caricamento dati.</td></tr>`;
+      playersBody.innerHTML = `<tr><td colspan="4" class="empty-state">Error loading data.</td></tr>`;
     }
   }
 
@@ -63,18 +61,18 @@
     if (!name) return;
 
     if (!EloApp.github.hasToken()) {
-      showMsg(newPlayerMsg, "error", 'Nessun token configurato. Vai in <a href="settings.html">Impostazioni</a>.');
+      showMsg(newPlayerMsg, "error", 'No token configured. Go to <a href="settings.html">Settings</a>.');
       return;
     }
 
     const duplicate = cachedPlayers.some((p) => p.name.trim().toLowerCase() === name.toLowerCase());
     if (duplicate) {
-      showMsg(newPlayerMsg, "error", "Esiste già un giocatore con questo nome.");
+      showMsg(newPlayerMsg, "error", "A player with this name already exists.");
       return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Salvataggio…";
+    submitBtn.textContent = "Saving…";
 
     try {
       const { content: freshPlayers, sha } = await EloApp.github.getFileWithSha("data/players.json");
@@ -82,9 +80,9 @@
       const newPlayer = { id, name, joined };
       const updated = [...freshPlayers, newPlayer];
 
-      await EloApp.github.saveJsonFile("data/players.json", updated, `Aggiunto giocatore: ${name}`, sha);
+      await EloApp.github.saveJsonFile("data/players.json", updated, `Added player: ${name}`, sha);
 
-      showMsg(newPlayerMsg, "success", `${escapeHtml(name)} è stato aggiunto! Potrebbero volerci alcuni secondi prima che il sito pubblicato si aggiorni.`);
+      showMsg(newPlayerMsg, "success", `${escapeHtml(name)} was added! The published site may take a few seconds to update.`);
       nameInput.value = "";
       joinedInput.value = new Date().toISOString().slice(0, 10);
       await render();
@@ -92,7 +90,7 @@
       showMsg(newPlayerMsg, "error", err.message || err);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = "Aggiungi giocatore";
+      submitBtn.textContent = "Add player";
     }
   });
 

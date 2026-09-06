@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classifica – Elo del Gruppo</title>
+<title>Standings – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -11,19 +11,19 @@
 
 <nav class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
     <div class="nav-links">
-      <a href="index.html" class="active">Classifica</a>
-      <a href="players.html">Giocatori</a>
-      <a href="new-tournament.html">Nuovo Torneo</a>
-      <a href="settings.html">Impostazioni</a>
+      <a href="index.html" class="active">Standings</a>
+      <a href="players.html">Players</a>
+      <a href="new-tournament.html">New Tournament</a>
+      <a href="settings.html">Settings</a>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <h1>Classifica Elo</h1>
-  <p class="subtitle">Punteggio Elo calcolato su tutte le partite giocate dal gruppo.</p>
+  <h1>Elo Standings</h1>
+  <p class="subtitle">Elo rating computed from every tournament played by the group.</p>
 
   <div id="msg-area"></div>
 
@@ -33,40 +33,41 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Giocatore</th>
+            <th>Player</th>
             <th class="num">Elo</th>
-            <th class="num">Partite</th>
-            <th>V-P-S</th>
-            <th class="num">% Vittorie</th>
+            <th class="num">Matches</th>
+            <th>W-D-L</th>
+            <th class="num">Win %</th>
           </tr>
         </thead>
         <tbody id="ranking-body">
-          <tr><td colspan="6" class="empty-state">Caricamento…</td></tr>
+          <tr><td colspan="6" class="empty-state">Loading…</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <h2>Ultime partite</h2>
+  <h2 id="latest-tournament-title">Latest Tournament</h2>
+  <p class="subtitle" id="latest-tournament-subtitle"></p>
   <div class="card">
     <div class="table-scroll">
       <table id="recent-table">
         <thead>
           <tr>
-            <th>Data</th>
+            <th>Round</th>
             <th>Match</th>
-            <th>Risultato</th>
+            <th>Score</th>
             <th class="num">Δ Elo</th>
           </tr>
         </thead>
         <tbody id="recent-body">
-          <tr><td colspan="4" class="empty-state">Caricamento…</td></tr>
+          <tr><td colspan="4" class="empty-state">Loading…</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <p class="footer-note">Elo iniziale: <span id="cfg-base-elo"></span> · K-factor: <span id="cfg-base-k"></span> (ridotto per i risultati 1-0/0-1)</p>
+  <p class="footer-note">Starting Elo: <span id="cfg-base-elo"></span> · K-factor: <span id="cfg-base-k"></span> (reduced for 1-0/0-1 results)</p>
 </div>
 
 <script src="assets/js/config.js"></script>

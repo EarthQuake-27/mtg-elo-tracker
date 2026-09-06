@@ -14,38 +14,38 @@
   }
 
   if (EloApp.github.hasToken()) {
-    tokenInput.placeholder = "Token già salvato in questo browser (nascosto)";
+    tokenInput.placeholder = "Token already saved in this browser (hidden)";
   }
 
   saveBtn.addEventListener("click", () => {
     const value = tokenInput.value.trim();
     if (!value) {
-      showMsg("error", "Inserisci un token prima di salvare.");
+      showMsg("error", "Enter a token before saving.");
       return;
     }
     EloApp.github.setToken(value);
     tokenInput.value = "";
-    tokenInput.placeholder = "Token già salvato in questo browser (nascosto)";
-    showMsg("success", "Token salvato in questo browser. Ora prova 'Verifica connessione'.");
+    tokenInput.placeholder = "Token already saved in this browser (hidden)";
+    showMsg("success", "Token saved in this browser. Now try 'Test connection'.");
   });
 
   clearBtn.addEventListener("click", () => {
     EloApp.github.clearToken();
     tokenInput.placeholder = "github_pat_xxx...";
-    showMsg("info", "Token rimosso da questo browser.");
+    showMsg("info", "Token removed from this browser.");
   });
 
   testBtn.addEventListener("click", async () => {
     testBtn.disabled = true;
-    testBtn.textContent = "Verifica in corso…";
+    testBtn.textContent = "Testing…";
     try {
       await EloApp.github.testConnection();
-      showMsg("success", `Connessione riuscita a ${cfg.GITHUB_OWNER}/${cfg.GITHUB_REPO}! Puoi inserire partite e giocatori.`);
+      showMsg("success", `Connection successful to ${cfg.GITHUB_OWNER}/${cfg.GITHUB_REPO}! You can now add tournaments and players.`);
     } catch (err) {
       showMsg("error", err.message || String(err));
     } finally {
       testBtn.disabled = false;
-      testBtn.textContent = "Verifica connessione";
+      testBtn.textContent = "Test connection";
     }
   });
 })();

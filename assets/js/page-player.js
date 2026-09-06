@@ -16,26 +16,38 @@
     msgArea.innerHTML = `<div class="msg error">${text}</div>`;
   }
 
-  function colorPips(colors) {
-    if (!colors || colors.length === 0) return '<span class="pip-row">—</span>';
+  function colorPips(mainColors, splashColors) {
+    const main = mainColors || [];
+    const splash = splashColors || [];
+    if (main.length === 0 && splash.length === 0) return '<span class="pip-row">—</span>';
+    const pip = (c, isSplash) => {
+      const meta = EloApp.COLOR_META[c];
+      if (!meta) return "";
+      const title = isSplash ? `${meta.name} (splash)` : meta.name;
+      return `<span class="pip${isSplash ? " splash" : ""}" style="background:${meta.hex}; color:${meta.text};" title="${title}">${c}</span>`;
+    };
     return (
       '<span class="pip-row">' +
-      colors
-        .map((c) => {
-          const meta = EloApp.COLOR_META[c];
-          if (!meta) return "";
-          return `<span class="pip" style="background:${meta.hex}; color:${meta.text};" title="${meta.name}">${c}</span>`;
-        })
-        .join("") +
+      main.map((c) => pip(c, false)).join("") +
+      splash.map((c) => pip(c, true)).join("") +
       "</span>"
     );
+  }
+
+  function statBar(segments) {
+    // segments: [{ pct, color, label }]
+    const fills = segments
+      .filter((s) => s.pct > 0)
+      .map((s) => `<div class="fill" style="width:${s.pct}%; background:${s.color};" title="${s.label}: ${Math.round(s.pct)}%"></div>`)
+      .join("");
+    return `<div class="track">${fills}</div>`;
   }
 
   const params = new URLSearchParams(window.location.search);
   const playerId = params.get("id");
 
   if (!playerId) {
-    showError('Nessun giocatore specificato. Torna alla pagina <a href="players.html">Giocatori</a>.');
+    showError('No player specified. Go back to the <a href="players.html">Players</a> page.');
     return;
   }
 
@@ -44,7 +56,7 @@
     const player = players.find((p) => p.id === playerId);
 
     if (!player) {
-      showError('Giocatore non trovato. Torna alla pagina <a href="players.html">Giocatori</a>.');
+      showError('Player not found. Go back to the <a href="players.html">Players</a> page.');
       return;
     }
 
@@ -55,7 +67,7 @@
     document.title = `${player.name} – ${cfg.SITE_NAME}`;
     document.getElementById("player-name").textContent = player.name;
     document.getElementById("player-subtitle").textContent = player.joined
-      ? `Nel gruppo dal ${player.joined}`
+      ? `In the group since ${player.joined}`
       : "";
 
     document.getElementById("stat-elo").textContent = Math.round(stats.elo);
@@ -66,47 +78,93 @@
     document.getElementById("stat-winrate").textContent = stats.matches > 0 ? `${winrate}%` : "—";
     document.getElementById("stat-games").textContent = `${stats.gamesWon}-${stats.gamesLost}`;
 
-    // Colori: calcolati per MAZZO (un torneo = un mazzo), non per partita/turno,
-    // altrimenti un torneo lungo peserebbe più di uno corto.
+    // Deck stats: computed per DECK (one tournament = one deck), not per round.
     const deckStats = EloApp.computeDeckStats(playerId, matches);
+    const splashRate = deckStats.totalDecks > 0 ? Math.round((deckStats.splashDeckCount / deckStats.totalDecks) * 100) : 0;
+    document.getElementById("stat-splashrate").textContent = deckStats.totalDecks > 0 ? `${splashRate}%` : "—";
+
+    // Win / draw / loss bar (graphical, alongside the numeric tiles above)
+    const recordBarEl = document.getElementById("record-bar");
+    if (stats.matches === 0) {
+      recordBarEl.innerHTML = '<p class="empty-state" style="padding:8px 0;">No matches recorded yet.</p>';
+    } else {
+      const winPct = (stats.wins / stats.matches) * 100;
+      const drawPct = (stats.draws / stats.matches) * 100;
+      const lossPct = (stats.losses / stats.matches) * 100;
+      recordBarEl.innerHTML = `
+        ${statBar([
+          { pct: winPct, color: "var(--success)", label: "Wins" },
+          { pct: drawPct, color: "var(--warn)", label: "Draws" },
+          { pct: lossPct, color: "var(--danger)", label: "Losses" },
+        ])}
+        <div class="legend-row">
+          <span><span class="swatch-dot" style="background:var(--success);"></span>Win ${Math.round(winPct)}%</span>
+          <span><span class="swatch-dot" style="background:var(--warn);"></span>Draw ${Math.round(drawPct)}%</span>
+          <span><span class="swatch-dot" style="background:var(--danger);"></span>Loss ${Math.round(lossPct)}%</span>
+        </div>`;
+    }
+
+    // Colors played: main-color presence and splash presence, per color.
     const colorCard = document.getElementById("color-usage-card");
-    const colorDistCard = document.getElementById("color-dist-card");
     const deckCountNote = document.getElementById("deck-count-note");
 
     if (deckStats.totalDecks === 0) {
       deckCountNote.textContent = "";
-      colorCard.innerHTML = '<p class="empty-state">Nessun mazzo registrato ancora.</p>';
-      colorDistCard.innerHTML = '<p class="empty-state">Nessun mazzo registrato ancora.</p>';
+      colorCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
     } else {
-      deckCountNote.textContent = `Su ${deckStats.totalDecks} mazzi giocati (un torneo conta come un mazzo solo).`;
+      deckCountNote.textContent = `Across ${deckStats.totalDecks} deck(s) played (one tournament counts as one deck).`;
 
-      colorCard.innerHTML = EloApp.COLORS.map((c) => {
-        const meta = EloApp.COLOR_META[c];
-        const count = deckStats.colorPresence[c];
-        const pct = Math.round((count / deckStats.totalDecks) * 100);
-        return `<div class="color-bar">
-          <div class="swatch" style="background:${meta.hex}; color:${meta.text};">${c}</div>
-          <div class="track"><div class="fill" style="width:${pct}%; background:${meta.hex};"></div></div>
-          <div class="count">${pct}%</div>
-        </div>`;
-      }).join("");
+      colorCard.innerHTML =
+        EloApp.COLORS.map((c) => {
+          const meta = EloApp.COLOR_META[c];
+          const mainPct = Math.round((deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100);
+          const splashPct = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
+          return `<div class="color-bar">
+            <div class="swatch" style="background:${meta.hex}; color:${meta.text};">${c}</div>
+            ${statBar([
+              { pct: mainPct, color: meta.hex, label: `${meta.name} (main)` },
+              { pct: splashPct, color: meta.hex + "88", label: `${meta.name} (splash)` },
+            ])}
+            <div class="count">${mainPct}%<span style="opacity:.6;"> +${splashPct}%</span></div>
+          </div>`;
+        }).join("") +
+        `<div class="legend-row"><span><span class="swatch-dot" style="background:var(--accent);"></span>solid = main color</span><span><span class="swatch-dot" style="background:var(--accent); opacity:.5;"></span>faded = splash</span></div>`;
+    }
 
-      const distLabels = { 0: "Incolore", 1: "Monocolore", 2: "Bicolore", 3: "Tricolore", 4: "4 colori", 5: "5 colori" };
-      colorDistCard.innerHTML = `<div class="deck-dist-grid">${[0, 1, 2, 3, 4, 5]
+    // Colors per deck: distribution of how many MAIN colors a deck has,
+    // plus how often a splash color was added on top.
+    const colorDistCard = document.getElementById("color-dist-card");
+    if (deckStats.totalDecks === 0) {
+      colorDistCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
+    } else {
+      const distLabels = { 0: "Colorless", 1: "Mono-color", 2: "Two-color", 3: "Three-color", 4: "Four-color", 5: "Five-color" };
+      const rows = [0, 1, 2, 3, 4, 5]
         .filter((n) => n > 0 || deckStats.colorCountHist[0] > 0)
         .map((n) => {
           const count = deckStats.colorCountHist[n];
           const pct = Math.round((count / deckStats.totalDecks) * 100);
-          return `<div class="deck-dist-tile"><div class="n">${pct}%</div><div class="lbl">${distLabels[n]} (${count})</div></div>`;
+          return `<div class="color-bar">
+            <div class="bar-label">${distLabels[n]}</div>
+            ${statBar([{ pct, color: "var(--accent)", label: distLabels[n] }])}
+            <div class="count">${pct}% <span style="opacity:.6;">(${count})</span></div>
+          </div>`;
         })
-        .join("")}</div>`;
+        .join("");
+
+      const splashRow = `<div class="color-bar">
+        <div class="bar-label">Splash used</div>
+        ${statBar([{ pct: splashRate, color: "var(--accent-dark)", label: "Splash used" }])}
+        <div class="count">${splashRate}% <span style="opacity:.6;">(${deckStats.splashDeckCount})</span></div>
+      </div>`;
+
+      colorDistCard.innerHTML = rows + `<hr style="border:none; border-top:1px solid var(--border); margin:14px 0;">` + splashRow;
     }
 
     // Match history (only this player's matches)
     const myMatches = matchLog.filter((m) => m.playerA === playerId || m.playerB === playerId).reverse();
     const matchesBody = document.getElementById("matches-body");
     if (myMatches.length === 0) {
-      matchesBody.innerHTML = '<tr><td colspan="6" class="empty-state">Nessuna partita registrata ancora.</td></tr>';
+      matchesBody.innerHTML = '<tr><td colspan="6" class="empty-state">No matches recorded yet.</td></tr>';
     } else {
       matchesBody.innerHTML = myMatches
         .map((m) => {
@@ -118,16 +176,22 @@
           const delta = isA ? m.deltaA : m.deltaB;
           const myColors = isA ? m.colorsA : m.colorsB;
           const oppColors = isA ? m.colorsB : m.colorsA;
-          const badge = myScore > oppScore ? '<span class="badge win">Vittoria</span>' : myScore < oppScore ? '<span class="badge loss">Sconfitta</span>' : '<span class="badge draw">Pareggio</span>';
-
-          const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· Turno ${m.round}</span>` : m.date;
+          const mySplash = isA ? m.splashA : m.splashB;
+          const oppSplash = isA ? m.splashB : m.splashA;
+          const badge =
+            myScore > oppScore
+              ? '<span class="badge win">Win</span>'
+              : myScore < oppScore
+              ? '<span class="badge loss">Loss</span>'
+              : '<span class="badge draw">Draw</span>';
+          const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· Round ${m.round}</span>` : m.date;
 
           return `<tr>
             <td>${dateLabel}</td>
             <td><a href="player.html?id=${encodeURIComponent(oppId)}">${escapeHtml(oppName)}</a></td>
             <td>${myScore}-${oppScore} ${badge}</td>
-            <td>${colorPips(myColors)}</td>
-            <td>${colorPips(oppColors)}</td>
+            <td>${colorPips(myColors, mySplash)}</td>
+            <td>${colorPips(oppColors, oppSplash)}</td>
             <td class="num"><span class="${delta >= 0 ? "delta-pos" : "delta-neg"}">${delta >= 0 ? "+" : ""}${delta.toFixed(1)}</span></td>
           </tr>`;
         })

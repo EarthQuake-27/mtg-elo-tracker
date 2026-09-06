@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giocatori – Elo del Gruppo</title>
+<title>Players – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -11,19 +11,19 @@
 
 <nav class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="index.html">🃏 <span id="brand-name">Elo del Gruppo</span></a>
+    <a class="brand" href="index.html">🃏 <span id="brand-name">Playgroup Elo</span></a>
     <div class="nav-links">
-      <a href="index.html">Classifica</a>
-      <a href="players.html" class="active">Giocatori</a>
-      <a href="new-tournament.html">Nuovo Torneo</a>
-      <a href="settings.html">Impostazioni</a>
+      <a href="index.html">Standings</a>
+      <a href="players.html" class="active">Players</a>
+      <a href="new-tournament.html">New Tournament</a>
+      <a href="settings.html">Settings</a>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <h1>Giocatori</h1>
-  <p class="subtitle">Tutti i membri del gruppo. Clicca su un nome per vedere le statistiche individuali.</p>
+  <h1>Players</h1>
+  <p class="subtitle">Every member of the group. Click a name to see their individual stats.</p>
 
   <div id="msg-area"></div>
 
@@ -32,35 +32,35 @@
       <table id="players-table">
         <thead>
           <tr>
-            <th>Giocatore</th>
+            <th>Player</th>
             <th class="num">Elo</th>
-            <th class="num">Partite</th>
-            <th>Da quando</th>
+            <th class="num">Matches</th>
+            <th>Since</th>
           </tr>
         </thead>
         <tbody id="players-body">
-          <tr><td colspan="4" class="empty-state">Caricamento…</td></tr>
+          <tr><td colspan="4" class="empty-state">Loading…</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <h2>Aggiungi un nuovo giocatore</h2>
+  <h2>Add a new player</h2>
   <div class="card">
     <form id="new-player-form">
-      <label for="player-name">Nome</label>
-      <input type="text" id="player-name" placeholder="es. Federico" required>
+      <label for="player-name">Name</label>
+      <input type="text" id="player-name" placeholder="e.g. Federico" required>
 
-      <label for="player-joined">Data di ingresso nel gruppo</label>
+      <label for="player-joined">Date joined the group</label>
       <input type="date" id="player-joined" required>
 
       <div id="new-player-msg"></div>
 
       <div style="margin-top:18px;">
-        <button type="submit" class="btn" id="submit-player-btn">Aggiungi giocatore</button>
+        <button type="submit" class="btn" id="submit-player-btn">Add player</button>
       </div>
     </form>
-    <p class="footer-note" style="margin-top:16px;">Serve un token GitHub configurato in <a href="settings.html">Impostazioni</a> per poter salvare.</p>
+    <p class="footer-note" style="margin-top:16px;">A GitHub token configured in <a href="settings.html">Settings</a> is required to save.</p>
   </div>
 </div>
 

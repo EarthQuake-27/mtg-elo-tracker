@@ -35,7 +35,7 @@
       { label: "0 - 1", scoreA: 0, scoreB: 1 },
     ],
   };
-  const OUTCOME_LABELS = { A: "Vince A", DRAW: "Pareggio", B: "Vince B" };
+  const OUTCOME_LABELS = { A: "A wins", DRAW: "Draw", B: "B wins" };
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -57,57 +57,95 @@
     return `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
   }
 
-  // --- Colori mazzo (checkbox) ---
-  function buildColorCheckboxes(container, prefix) {
-    container.innerHTML = EloApp.COLORS.map((c) => {
-      const meta = EloApp.COLOR_META[c];
-      return `<label class="color-check" data-color="${c}">
-        <input type="checkbox" value="${c}" id="${prefix}-${c}">
-        <span class="dot" style="background:${meta.hex};"></span>
-        ${meta.name}
-      </label>`;
-    }).join("");
-
-    container.querySelectorAll(".color-check").forEach((label) => {
-      const checkbox = label.querySelector("input");
-      checkbox.addEventListener("change", () => label.classList.toggle("checked", checkbox.checked));
+  // --- Deck colors (main + splash) ---
+  function buildCell(container, color, meta, onChange) {
+    const label = document.createElement("label");
+    label.className = "color-cell";
+    label.innerHTML = `<input type="checkbox" value="${color}"><span class="dot" style="background:${meta.hex};"></span><span class="lbl">${meta.name}</span>`;
+    container.appendChild(label);
+    const input = label.querySelector("input");
+    input.addEventListener("change", () => {
+      label.classList.toggle("checked", input.checked);
+      onChange();
     });
+    return { label, input };
   }
 
-  function getSelectedColors(container) {
-    return Array.from(container.querySelectorAll("input:checked")).map((i) => i.value);
+  function setupColorPicker(mainContainer, splashContainer) {
+    const mainCells = {};
+    const splashCells = {};
+
+    function enforceSplashLimit() {
+      const checkedSplash = EloApp.COLORS.filter((c) => splashCells[c].input.checked);
+      EloApp.COLORS.forEach((c) => {
+        const sc = splashCells[c];
+        if (mainCells[c].input.checked) return; // already disabled by onMainChange
+        const overLimit = !sc.input.checked && checkedSplash.length >= cfg.MAX_SPLASH_COLORS;
+        sc.input.disabled = overLimit;
+        sc.label.classList.toggle("disabled", overLimit);
+      });
+    }
+
+    function onMainChange() {
+      EloApp.COLORS.forEach((c) => {
+        const sc = splashCells[c];
+        if (mainCells[c].input.checked) {
+          sc.input.checked = false;
+          sc.label.classList.remove("checked");
+          sc.input.disabled = true;
+          sc.label.classList.add("disabled");
+        } else {
+          sc.input.disabled = false;
+          sc.label.classList.remove("disabled");
+        }
+      });
+      enforceSplashLimit();
+    }
+
+    EloApp.COLORS.forEach((c) => {
+      const meta = EloApp.COLOR_META[c];
+      mainCells[c] = buildCell(mainContainer, c, meta, onMainChange);
+      splashCells[c] = buildCell(splashContainer, c, meta, enforceSplashLimit);
+    });
+
+    return {
+      getMainColors: () => EloApp.COLORS.filter((c) => mainCells[c].input.checked),
+      getSplashColors: () => EloApp.COLORS.filter((c) => splashCells[c].input.checked),
+    };
   }
 
-  // --- Step 1: partecipanti ---
+  // --- Step 1: participants ---
   let players = [];
   let participantRows = [];
   let rowUid = 0;
 
   function addParticipantRow() {
     const uid = rowUid++;
-    const row = document.createElement("div");
-    row.className = "participant-row";
-    row.innerHTML = `
-      <div class="combobox-col"></div>
-      <div class="colors-col">
-        <div class="color-check-group" id="colors-${uid}"></div>
+    const card = document.createElement("div");
+    card.className = "participant-card";
+    card.innerHTML = `
+      <div class="participant-top">
+        <div class="combobox-col" style="flex:1;"></div>
+        <button type="button" class="row-remove-btn" title="Remove player">✕</button>
       </div>
-      <div class="remove-col"><button type="button" class="row-remove-btn" title="Rimuovi giocatore">✕</button></div>
+      <div class="color-group-label">Main colors (1–5)</div>
+      <div class="color-grid" id="main-${uid}"></div>
+      <div class="color-group-label">Splash <span class="splash-badge">optional, up to ${cfg.MAX_SPLASH_COLORS}</span></div>
+      <div class="color-grid" id="splash-${uid}"></div>
     `;
-    participantsList.appendChild(row);
+    participantsList.appendChild(card);
 
-    const combo = EloApp.createPlayerCombobox(row.querySelector(".combobox-col"), players, {
-      placeholder: "Nome giocatore",
+    const combo = EloApp.createPlayerCombobox(card.querySelector(".combobox-col"), players, {
+      placeholder: "Player name",
     });
-    const colorsContainer = row.querySelector(".color-check-group");
-    buildColorCheckboxes(colorsContainer, `pc${uid}`);
+    const picker = setupColorPicker(card.querySelector(`#main-${uid}`), card.querySelector(`#splash-${uid}`));
 
-    row.querySelector(".row-remove-btn").addEventListener("click", () => {
-      row.remove();
-      participantRows = participantRows.filter((r) => r.row !== row);
+    card.querySelector(".row-remove-btn").addEventListener("click", () => {
+      card.remove();
+      participantRows = participantRows.filter((r) => r.card !== card);
     });
 
-    participantRows.push({ row, combo, colorsContainer });
+    participantRows.push({ card, combo, picker });
   }
 
   function gatherParticipants() {
@@ -117,25 +155,31 @@
 
     participantRows.forEach((pr, idx) => {
       const val = pr.combo.getValue();
-      const colors = getSelectedColors(pr.colorsContainer);
+      const mainColors = pr.picker.getMainColors();
+      const splashColors = pr.picker.getSplashColors();
 
-      if (val.mode === "empty" && colors.length === 0) return; // riga vuota, ignorata
+      if (val.mode === "empty" && mainColors.length === 0 && splashColors.length === 0) return; // blank row, ignored
 
-      if (val.mode === "empty" && colors.length > 0) {
-        errors.push(`Riga ${idx + 1}: hai selezionato dei colori ma non hai scritto un nome.`);
+      if (val.mode === "empty") {
+        errors.push(`Row ${idx + 1}: you selected colors but didn't enter a name.`);
         return;
       }
-      if (colors.length === 0) {
-        errors.push(`${escapeHtml(val.name)}: seleziona almeno un colore per il mazzo.`);
+      if (mainColors.length === 0) {
+        errors.push(`${escapeHtml(val.name)}: select at least one main color for the deck.`);
         return;
       }
       const key = val.mode === "existing" ? `id:${val.id}` : `name:${val.name.trim().toLowerCase()}`;
       if (seenKeys.has(key)) {
-        errors.push(`"${escapeHtml(val.name)}" compare più di una volta tra i partecipanti.`);
+        errors.push(`"${escapeHtml(val.name)}" appears more than once among the participants.`);
         return;
       }
       seenKeys.add(key);
-      result.push({ name: val.name.trim(), colors, existingId: val.mode === "existing" ? val.id : null });
+      result.push({
+        name: val.name.trim(),
+        colors: mainColors,
+        splash: splashColors,
+        existingId: val.mode === "existing" ? val.id : null,
+      });
     });
 
     return { result, errors };
@@ -143,7 +187,7 @@
 
   addParticipantBtn.addEventListener("click", addParticipantRow);
 
-  // --- Step 2: turni e matchup ---
+  // --- Step 2: rounds and matchups ---
   let resolvedParticipants = [];
   let tournamentDate = "";
   let roundsCount = 3;
@@ -188,20 +232,20 @@
       .join("");
     row.innerHTML = `
       <div class="vs-select">
-        <label style="margin-top:0;">Giocatore A</label>
-        <select class="matchup-a"><option value="">-- scegli --</option>${options}</select>
+        <label style="margin-top:0;">Player A</label>
+        <select class="matchup-a"><option value="">-- choose --</option>${options}</select>
       </div>
       <div class="vs-sep">vs</div>
       <div class="vs-select">
-        <label style="margin-top:0;">Giocatore B</label>
-        <select class="matchup-b"><option value="">-- scegli --</option>${options}</select>
+        <label style="margin-top:0;">Player B</label>
+        <select class="matchup-b"><option value="">-- choose --</option>${options}</select>
       </div>
       <div class="outcome-col">
-        <label style="margin-top:0;">Esito</label>
+        <label style="margin-top:0;">Outcome</label>
         <div class="choice-group outcome-group"></div>
         <div class="choice-group score-group" style="margin-top:8px;"></div>
       </div>
-      <div class="remove-col"><button type="button" class="row-remove-btn" title="Rimuovi matchup">✕</button></div>
+      <div class="remove-col"><button type="button" class="row-remove-btn" title="Remove matchup">✕</button></div>
     `;
     container.appendChild(row);
 
@@ -219,9 +263,9 @@
       const bVal = bSelect.value;
       const isEmpty = aVal === "" && bVal === "" && !state.outcome;
       if (isEmpty) return { status: "empty" };
-      if (aVal === "" || bVal === "") return { status: "incomplete", reason: "seleziona entrambi i giocatori" };
-      if (aVal === bVal) return { status: "incomplete", reason: "i due giocatori devono essere diversi" };
-      if (!state.outcome || !state.score) return { status: "incomplete", reason: "seleziona esito e punteggio" };
+      if (aVal === "" || bVal === "") return { status: "incomplete", reason: "choose both players" };
+      if (aVal === bVal) return { status: "incomplete", reason: "the two players must be different" };
+      if (!state.outcome || !state.score) return { status: "incomplete", reason: "choose the outcome and the score" };
       return {
         status: "ok",
         aIndex: Number(aVal),
@@ -240,7 +284,7 @@
       const roundCard = document.createElement("div");
       roundCard.className = "card round-card";
       roundCard.dataset.round = String(r);
-      roundCard.innerHTML = `<h3>Turno ${r}</h3><div class="matchups-list"></div>`;
+      roundCard.innerHTML = `<h3>Round ${r}</h3><div class="matchups-list"></div>`;
       const matchupsList = roundCard.querySelector(".matchups-list");
 
       for (let i = 0; i < defaultMatchups; i++) addMatchupRow(matchupsList, resolvedParticipants);
@@ -249,7 +293,7 @@
       addBtn.type = "button";
       addBtn.className = "btn secondary";
       addBtn.style.marginTop = "10px";
-      addBtn.textContent = "+ Aggiungi matchup";
+      addBtn.textContent = "+ Add matchup";
       addBtn.addEventListener("click", () => addMatchupRow(matchupsList, resolvedParticipants));
       roundCard.appendChild(addBtn);
 
@@ -261,10 +305,10 @@
     step1Msg.innerHTML = "";
     const { result, errors } = gatherParticipants();
 
-    if (!tournamentDateInput.value) errors.push("Inserisci la data del torneo.");
+    if (!tournamentDateInput.value) errors.push("Enter the tournament date.");
     const roundsVal = parseInt(roundsCountInput.value, 10);
-    if (!roundsVal || roundsVal < 1) errors.push("Inserisci un numero di turni valido (almeno 1).");
-    if (result.length < 2) errors.push("Servono almeno due partecipanti.");
+    if (!roundsVal || roundsVal < 1) errors.push("Enter a valid number of rounds (at least 1).");
+    if (result.length < 2) errors.push("At least two participants are needed.");
 
     if (errors.length) {
       showMsg(step1Msg, "error", errors);
@@ -287,12 +331,12 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // --- Salvataggio ---
+  // --- Save ---
   saveTournamentBtn.addEventListener("click", async () => {
     step2Msg.innerHTML = "";
 
     if (!EloApp.github.hasToken()) {
-      showMsg(step2Msg, "error", 'Nessun token configurato. Vai in <a href="settings.html">Impostazioni</a>.');
+      showMsg(step2Msg, "error", 'No GitHub token configured. Go to <a href="settings.html">Settings</a>.');
       return;
     }
 
@@ -305,7 +349,7 @@
         const v = row._getValue();
         if (v.status === "empty") return;
         if (v.status === "incomplete") {
-          errors.push(`Turno ${round}, matchup ${i + 1}: ${v.reason}.`);
+          errors.push(`Round ${round}, matchup ${i + 1}: ${v.reason}.`);
           return;
         }
         valid.push(v);
@@ -314,7 +358,7 @@
     });
 
     const totalValid = matchesByRound.reduce((n, r) => n + r.valid.length, 0);
-    if (totalValid === 0) errors.push("Non hai inserito nessun risultato.");
+    if (totalValid === 0) errors.push("You haven't entered any results.");
 
     if (errors.length) {
       showMsg(step2Msg, "error", errors);
@@ -323,10 +367,10 @@
 
     saveTournamentBtn.disabled = true;
     backToStep1Btn.disabled = true;
-    saveTournamentBtn.textContent = "Salvataggio…";
+    saveTournamentBtn.textContent = "Saving…";
 
     try {
-      // 1. Crea eventuali nuovi giocatori
+      // 1. Create any new players
       const newParticipants = resolvedParticipants.filter((p) => !p.existingId);
       if (newParticipants.length > 0) {
         const { content: freshPlayers, sha } = await EloApp.github.getFileWithSha("data/players.json");
@@ -338,7 +382,7 @@
         await EloApp.github.saveJsonFile(
           "data/players.json",
           updatedPlayers,
-          `Nuovi giocatori dal torneo del ${tournamentDate}: ${newParticipants.map((p) => p.name).join(", ")}`,
+          `New players from the ${tournamentDate} tournament: ${newParticipants.map((p) => p.name).join(", ")}`,
           sha
         );
       }
@@ -346,7 +390,7 @@
         if (p.existingId) p.finalId = p.existingId;
       });
 
-      // 2. Costruisci e salva tutte le partite del torneo in un unico commit
+      // 2. Build and save all of the tournament's matches in a single commit
       const tournamentId = genId("t");
       let matchCounter = 0;
       const newMatches = [];
@@ -365,6 +409,8 @@
             scoreB: v.scoreB,
             colorsA: pA.colors,
             colorsB: pB.colors,
+            splashA: pA.splash,
+            splashB: pB.splash,
             note: "",
           });
         });
@@ -375,16 +421,16 @@
       await EloApp.github.saveJsonFile(
         "data/matches.json",
         updatedMatches,
-        `Torneo del ${tournamentDate}: ${newMatches.length} partite, ${roundsCount} turni`,
+        `Tournament on ${tournamentDate}: ${newMatches.length} matches, ${roundsCount} rounds`,
         matchesSha
       );
 
       showMsg(
         step2Msg,
         "success",
-        `Torneo salvato: ${newMatches.length} partite in ${roundsCount} turni` +
-          (newParticipants.length ? `, ${newParticipants.length} nuovo/i giocatore/i creato/i` : "") +
-          `. Potrebbero volerci alcuni secondi prima che il sito pubblicato si aggiorni. Vai alla <a href="index.html">Classifica</a>.`
+        `Tournament saved: ${newMatches.length} matches in ${roundsCount} rounds` +
+          (newParticipants.length ? `, ${newParticipants.length} new player(s) created` : "") +
+          `. The published site may take a few seconds to update. Go to the <a href="index.html">Standings</a>.`
       );
 
       resetForm();
@@ -393,7 +439,7 @@
     } finally {
       saveTournamentBtn.disabled = false;
       backToStep1Btn.disabled = false;
-      saveTournamentBtn.textContent = "Salva torneo";
+      saveTournamentBtn.textContent = "Save tournament";
     }
   });
 
@@ -419,7 +465,7 @@
         showMsg(
           msgArea,
           "info",
-          "Non c'è ancora nessun giocatore: scrivi semplicemente i nomi dei partecipanti, verranno creati automaticamente."
+          "There are no players yet: just type the participants' names, they'll be created automatically."
         );
       }
     } catch (err) {

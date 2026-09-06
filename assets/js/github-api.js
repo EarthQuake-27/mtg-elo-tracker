@@ -1,12 +1,12 @@
 /**
- * Scrittura dei dati su GitHub tramite le API REST (Contents API), chiamate
- * direttamente dal browser. Serve un Personal Access Token con permesso di
- * scrittura sui contenuti del repository (vedi README.md per come crearlo).
+ * Writes data to GitHub via the REST API (Contents API), called directly
+ * from the browser. Requires a Personal Access Token with write access to
+ * the repository's contents (see README.md for how to create one).
  *
- * Il token viene salvato SOLO nel localStorage del tuo browser: non viene
- * mai inviato a nessun altro servizio se non alle API ufficiali di GitHub.
- * Chi visita il sito senza aver configurato un token può solo leggere i
- * dati (classifica, statistiche), non modificarli.
+ * The token is stored ONLY in your browser's localStorage: it is never
+ * sent anywhere except GitHub's official API. Anyone visiting the site
+ * without a configured token can only read the data (standings, stats),
+ * not change it.
  */
 (function (window) {
   const TOKEN_KEY = "mtgelo_gh_token";
@@ -43,7 +43,7 @@
   async function authHeaders() {
     const token = getToken();
     if (!token) {
-      throw new Error("Nessun token GitHub configurato. Vai nella pagina Impostazioni.");
+      throw new Error("No GitHub token configured. Go to the Settings page.");
     }
     return {
       Authorization: `Bearer ${token}`,
@@ -51,14 +51,14 @@
     };
   }
 
-  /** Legge un file JSON dal repo insieme al suo sha (serve per poterlo aggiornare). */
+  /** Reads a JSON file from the repo along with its sha (needed to update it). */
   async function getFileWithSha(path) {
     const cfg = window.EloApp.CONFIG;
     const headers = await authHeaders();
     const res = await fetch(`${apiUrl(path)}?ref=${cfg.GITHUB_BRANCH}`, { headers });
     if (!res.ok) {
       throw new Error(
-        `Impossibile leggere "${path}" da GitHub (status ${res.status}). Controlla token, owner e nome repo in config.js.`
+        `Could not read "${path}" from GitHub (status ${res.status}). Check the token, owner and repo name in config.js.`
       );
     }
     const data = await res.json();
@@ -66,7 +66,7 @@
     return { content, sha: data.sha };
   }
 
-  /** Sovrascrive un file JSON nel repo con un nuovo contenuto (commit automatico). */
+  /** Overwrites a JSON file in the repo with new content (automatic commit). */
   async function saveJsonFile(path, newContent, commitMessage, sha) {
     const cfg = window.EloApp.CONFIG;
     const headers = await authHeaders();
@@ -87,20 +87,18 @@
       const errBody = await res.json().catch(() => ({}));
       if (res.status === 409) {
         throw new Error(
-          "Conflitto: qualcun altro (o un'altra scheda) ha modificato i dati nel frattempo. Ricarica la pagina e riprova."
+          "Conflict: someone else (or another tab) changed the data in the meantime. Reload the page and try again."
         );
       }
       if (res.status === 401 || res.status === 403) {
-        throw new Error(
-          "Token non valido o senza i permessi necessari. Controlla la pagina Impostazioni."
-        );
+        throw new Error("Invalid token or missing permissions. Check the Settings page.");
       }
-      throw new Error(`Salvataggio fallito (status ${res.status}): ${errBody.message || "errore sconosciuto"}`);
+      throw new Error(`Save failed (status ${res.status}): ${errBody.message || "unknown error"}`);
     }
     return res.json();
   }
 
-  /** Verifica che token, owner e repo siano configurati correttamente. */
+  /** Checks that the token, owner and repo are configured correctly. */
   async function testConnection() {
     await getFileWithSha("data/players.json");
     return true;
