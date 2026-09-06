@@ -59,15 +59,16 @@
     const builder = COLOR_ICON_BUILDERS[code];
     const icon = builder ? builder(meta.text, meta.hex) : "";
     // White's fill is so close to the page background that a faint border
-    // leaves its circle with no visible edge, making it read as a
-    // different size than the vividly-colored circles (which need no
-    // border to look crisply bounded). Give it a much stronger outline so
-    // every color's circle is equally well-defined.
-    const isLight = code === "W";
-    const strokeColor = isLight ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.18)";
-    const strokeWidth = isLight ? 5 : 3;
+    // leaves its circle with no visible edge, making it look different
+    // from the vividly-colored circles (which look crisply bounded from
+    // their fill color alone). Darken white's border color for visibility
+    // -- but keep stroke-width IDENTICAL for every color, since SVG draws
+    // a stroke straddling the path: a thicker stroke on the same radius
+    // would bleed further outward and make that circle a hair bigger than
+    // the rest, which is exactly the kind of mismatch we're trying to fix.
+    const strokeColor = code === "W" ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.18)";
     return `<svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block;" aria-hidden="true">
-      <circle cx="50" cy="50" r="47" fill="${meta.hex}" stroke="${strokeColor}" stroke-width="${strokeWidth}"></circle>
+      <circle cx="50" cy="50" r="47" fill="${meta.hex}" stroke="${strokeColor}" stroke-width="3"></circle>
       ${icon}
     </svg>`;
   }
