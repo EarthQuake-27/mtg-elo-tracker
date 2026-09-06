@@ -148,17 +148,17 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .delta-neg { color: var(--danger); font-weight: 700; }
 
 .pip-row { display: inline-flex; gap: 3px; vertical-align: middle; }
-.pip.splash { opacity: 0.55; border-style: dashed; }
+.pip.splash { opacity: 0.6; outline: 1px dashed var(--text-muted); outline-offset: 1px; border-radius: 50%; }
 .pip {
   width: 18px; height: 18px;
   border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 800;
-  border: 1px solid rgba(0,0,0,.15);
+  overflow: hidden;
 }
+.pip svg { width: 100%; height: 100%; }
 
 .color-bar { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
-.color-bar .swatch { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.15); display:flex; align-items:center; justify-content:center; font-size: 11px; font-weight: 800;}
+.color-bar .swatch { width: 22px; height: 22px; flex-shrink: 0; display: block; }
 .color-bar .track { flex: 1; display: flex; background: var(--surface-alt); border-radius: 6px; height: 10px; overflow: hidden; }
 .color-bar .fill { height: 100%; flex-shrink: 0; }
 .color-bar .count { min-width: 30px; text-align: right; color: var(--text-muted); font-size: .85rem; white-space: nowrap; }
@@ -175,7 +175,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   cursor: pointer; user-select: none; text-align: center;
 }
 .color-cell input { position: absolute; opacity: 0; pointer-events: none; }
-.color-cell .dot { width: 20px; height: 20px; border-radius: 6px; border: 1px solid rgba(0,0,0,.2); }
+.color-cell .dot { width: 26px; height: 26px; display: block; }
 .color-cell .lbl { font-size: 0.72rem; font-weight: 700; line-height: 1.1; }
 .color-cell.checked { border-color: var(--accent); background: rgba(109,63,192,0.08); }
 .color-cell.disabled { opacity: 0.35; cursor: not-allowed; }
@@ -297,6 +297,9 @@ code {
   font-size: 0.85rem; line-height: 1; padding: 4px 7px; border-radius: 50%;
 }
 .tag-chip button:hover { color: var(--danger); background: var(--surface); }
+.tag-combo-row { display: flex; gap: 8px; align-items: flex-start; }
+.tag-combo-row .tag-combo-slot { flex: 1; }
+.tag-add-btn { flex-shrink: 0; white-space: nowrap; }
 
 /* --- Tournament builder --- */
 .participant-card {

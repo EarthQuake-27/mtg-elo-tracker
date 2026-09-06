@@ -201,3 +201,11 @@ un token (in genere solo tu) può inserire nuovi risultati.
   file `data/matches.json` su GitHub (pagina del file → matita per
   modificare → commit). Se vi serve spesso, si può aggiungere in futuro una
   pagina di modifica/cancellazione dedicata.
+- **Se dopo un aggiornamento il sito sembra "vecchio"** (una pagina non
+  riflette l'ultima modifica pubblicata): tutti i file `.css` e `.js` sono
+  richiamati con un numero di versione in fondo all'indirizzo (es.
+  `style.css?v=2`), proprio per evitare che il browser tenga in cache una
+  versione superata. Se noti ancora qualcosa di vecchio, prova prima un
+  hard refresh (`Cmd+Option+R` su Safari, `Cmd+Shift+R` su Chrome) — se il
+  problema persiste, dillo così alzo quel numero di versione in tutte le
+  pagine.

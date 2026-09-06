@@ -62,7 +62,7 @@
   function buildCell(container, color, meta, onChange) {
     const label = document.createElement("label");
     label.className = "color-cell";
-    label.innerHTML = `<input type="checkbox" value="${color}"><span class="dot" style="background:${meta.hex};"></span><span class="lbl">${meta.name}</span>`;
+    label.innerHTML = `<input type="checkbox" value="${color}"><span class="dot">${EloApp.colorIconSvg(color)}</span><span class="lbl">${meta.name}</span>`;
     container.appendChild(label);
     const input = label.querySelector("input");
     input.addEventListener("change", () => {
@@ -163,7 +163,7 @@
     const picker = setupColorPicker(card.querySelector(`#main-${uid}`), card.querySelector(`#splash-${uid}`));
     const archetypeInput = EloApp.createTagMultiInput(card.querySelector(".archetype-col"), archetypeItems, {
       itemLabel: "archetype",
-      placeholder: "e.g. Aggro, Control… (Enter to add)",
+      placeholder: "Type a tag, then press Enter or +",
       emptyLabel: "Type to pick or create an archetype.",
     });
 

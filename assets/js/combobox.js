@@ -137,35 +137,48 @@
 
     input.addEventListener("focus", renderList);
 
+    /** In "commit" mode (the multi-tag input): accepts whatever is
+     *  currently typed as one or more tags and clears the field. A comma
+     *  splits the text into several tags in one go (e.g. typing
+     *  "Reanimator, Control" and hitting Enter once adds both), so someone
+     *  who naturally types a combo deck as a single line doesn't get stuck
+     *  wondering how to add a second tag. */
+    function commitCurrent() {
+      const raw = input.value.trim();
+      if (!raw || !opts.onCommit) return;
+      raw
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean)
+        .forEach((part) => {
+          const exact = findExact(part);
+          opts.onCommit(exact ? { mode: "existing", id: exact.id, name: exact.name } : { mode: "new", name: part });
+        });
+      input.value = "";
+      resolved = { mode: "empty" };
+      updateHint();
+      list.hidden = true;
+    }
+
     input.addEventListener("blur", () => {
       // Delay closing so a click on a list item can register first.
       setTimeout(() => {
         list.hidden = true;
-        resolveFromInput();
-        // In "commit" mode, don't silently drop text left in the field
-        // when the user tabs/clicks away without pressing Enter.
-        if (opts.onCommit && resolved.mode !== "empty") {
-          opts.onCommit(resolved);
-          input.value = "";
-          resolved = { mode: "empty" };
-          updateHint();
+        if (opts.onCommit) {
+          // Don't silently drop text left in the field when the user
+          // tabs/clicks away without pressing Enter.
+          commitCurrent();
+        } else {
+          resolveFromInput();
         }
       }, 150);
     });
 
-    // In "commit" mode (used by the multi-tag input) Enter accepts the
-    // current text as one tag and clears the field, ready for the next one.
     if (opts.onCommit) {
       input.addEventListener("keydown", (e) => {
         if (e.key !== "Enter") return;
         e.preventDefault();
-        resolveFromInput();
-        if (resolved.mode === "empty") return;
-        opts.onCommit(resolved);
-        input.value = "";
-        resolved = { mode: "empty" };
-        updateHint();
-        list.hidden = true;
+        commitCurrent();
       });
     }
 
@@ -202,18 +215,20 @@
       setItems: (newItems) => {
         items = newItems;
       },
+      commit: commitCurrent,
       focus: () => input.focus(),
       el: container,
     };
   }
 
   /**
-   * Multiple tags picked one at a time via a createTagCombobox (Enter or
-   * click commits the current text as a chip and clears the field for the
-   * next one). Used for deck archetypes: a "Reanimator-Control" deck adds
-   * two separate chips, "Reanimator" and "Control", so each is counted on
-   * its own in the stats instead of forming a brand new, incomparable
-   * category.
+   * Multiple tags picked one at a time via a createTagCombobox (Enter, the
+   * "+" button, or a dropdown click commits the current text as a chip and
+   * clears the field for the next one; a comma splits the text into
+   * several tags at once). Used for deck archetypes: a "Reanimator-Control"
+   * deck adds two separate chips, "Reanimator" and "Control", so each is
+   * counted on its own in the stats instead of forming a brand new,
+   * incomparable category.
    *
    * Usage:
    *   const tags = EloApp.createTagMultiInput(container, allItems, opts);
@@ -222,10 +237,17 @@
   function createTagMultiInput(container, allItems, opts) {
     opts = opts || {};
     container.classList.add("tag-multi-input");
-    container.innerHTML = `<div class="tag-chip-row"></div><div class="tag-combo-slot"></div>`;
+    container.innerHTML = `
+      <div class="tag-chip-row"></div>
+      <div class="tag-combo-row">
+        <div class="tag-combo-slot"></div>
+        <button type="button" class="btn secondary tag-add-btn">+ Add</button>
+      </div>
+    `;
 
     const chipRow = container.querySelector(".tag-chip-row");
     const comboSlot = container.querySelector(".tag-combo-slot");
+    const addBtn = container.querySelector(".tag-add-btn");
     let selected = [];
 
     function escapeHtml(str) {
@@ -267,6 +289,11 @@
         renderChips();
         combo.setItems(availableItems());
       },
+    });
+
+    addBtn.addEventListener("click", () => {
+      combo.commit();
+      combo.focus();
     });
 
     renderChips();

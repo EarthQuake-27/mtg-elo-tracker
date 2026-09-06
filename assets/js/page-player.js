@@ -24,7 +24,7 @@
       const meta = EloApp.COLOR_META[c];
       if (!meta) return "";
       const title = isSplash ? `${meta.name} (splash)` : meta.name;
-      return `<span class="pip${isSplash ? " splash" : ""}" style="background:${meta.hex}; color:${meta.text};" title="${title}">${c}</span>`;
+      return `<span class="pip${isSplash ? " splash" : ""}" title="${title}">${EloApp.colorIconSvg(c)}</span>`;
     };
     return (
       '<span class="pip-row">' +
@@ -120,7 +120,7 @@
           const mainPct = Math.round((deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100);
           const splashPct = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
           return `<div class="color-bar">
-            <div class="swatch" style="background:${meta.hex}; color:${meta.text};">${c}</div>
+            <div class="swatch">${EloApp.colorIconSvg(c)}</div>
             ${statBar([
               { pct: mainPct, color: meta.hex, label: `${meta.name} (main)` },
               { pct: splashPct, color: meta.hex + "88", label: `${meta.name} (splash)` },

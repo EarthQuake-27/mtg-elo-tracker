@@ -21,6 +21,49 @@
     G: { name: "Green", hex: "#00733e", text: "#ffffff" },
   };
 
+  // Simple original glyphs (not Wizards' official mana symbol artwork) that
+  // evoke each color the way the real mana symbols do: a sun, a droplet, a
+  // skull, a flame, a tree. `fg` is the icon color (COLOR_META.text, chosen
+  // for contrast against the color's own background), `bg` is that same
+  // background, used to punch "holes" (skull eyes/teeth) through the icon.
+  const COLOR_ICON_BUILDERS = {
+    W: (fg) => `
+      <circle cx="50" cy="50" r="13" fill="${fg}"/>
+      <g stroke="${fg}" stroke-width="7" stroke-linecap="round">
+        <line x1="50" y1="9" x2="50" y2="25"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(45 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(90 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(135 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(180 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(225 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(270 50 50)"/>
+        <line x1="50" y1="9" x2="50" y2="25" transform="rotate(315 50 50)"/>
+      </g>`,
+    U: (fg) => `<path d="M50 13 C64 34 74 48 74 62 C74 79 63 90 50 90 C37 90 26 79 26 62 C26 48 36 34 50 13 Z" fill="${fg}"/>`,
+    B: (fg, bg) => `
+      <ellipse cx="50" cy="42" rx="27" ry="24" fill="${fg}"/>
+      <rect x="33" y="56" width="34" height="26" rx="9" fill="${fg}"/>
+      <circle cx="39" cy="40" r="7" fill="${bg}"/>
+      <circle cx="61" cy="40" r="7" fill="${bg}"/>
+      <rect x="44" y="64" width="4" height="10" fill="${bg}"/>
+      <rect x="52" y="64" width="4" height="10" fill="${bg}"/>`,
+    R: (fg) => `<path d="M50 8 C66 26 74 42 74 58 C74 78 64 92 50 92 C36 92 26 78 26 58 C26 46 32 36 40 28 C40 40 46 42 46 34 C46 24 44 16 50 8 Z" fill="${fg}"/>`,
+    G: (fg) => `<circle cx="50" cy="39" r="26" fill="${fg}"/><rect x="44" y="59" width="12" height="27" rx="3" fill="${fg}"/>`,
+  };
+
+  /** Returns a self-contained <svg> (circular color background + glyph) for
+   *  a WUBRG color code, ready to drop into any fixed-size wrapper. */
+  function colorIconSvg(code) {
+    const meta = COLOR_META[code];
+    if (!meta) return "";
+    const builder = COLOR_ICON_BUILDERS[code];
+    const icon = builder ? builder(meta.text, meta.hex) : "";
+    return `<svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block;" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="${meta.hex}" stroke="rgba(0,0,0,0.18)" stroke-width="3"></circle>
+      ${icon}
+    </svg>`;
+  }
+
   function expectedScore(ra, rb) {
     return 1 / (1 + Math.pow(10, (rb - ra) / 400));
   }
@@ -223,6 +266,7 @@
 
   window.EloApp.COLORS = COLORS;
   window.EloApp.COLOR_META = COLOR_META;
+  window.EloApp.colorIconSvg = colorIconSvg;
   window.EloApp.computeStandings = computeStandings;
   window.EloApp.computeDeckStats = computeDeckStats;
   window.EloApp.sortMatches = sortMatches;
