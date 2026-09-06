@@ -66,22 +66,40 @@
     document.getElementById("stat-winrate").textContent = stats.matches > 0 ? `${winrate}%` : "—";
     document.getElementById("stat-games").textContent = `${stats.gamesWon}-${stats.gamesLost}`;
 
-    // Color usage
+    // Colori: calcolati per MAZZO (un torneo = un mazzo), non per partita/turno,
+    // altrimenti un torneo lungo peserebbe più di uno corto.
+    const deckStats = EloApp.computeDeckStats(playerId, matches);
     const colorCard = document.getElementById("color-usage-card");
-    const totalColorPicks = Object.values(stats.colorCounts).reduce((a, b) => a + b, 0);
-    if (totalColorPicks === 0) {
-      colorCard.innerHTML = '<p class="empty-state">Nessun dato sui colori ancora.</p>';
+    const colorDistCard = document.getElementById("color-dist-card");
+    const deckCountNote = document.getElementById("deck-count-note");
+
+    if (deckStats.totalDecks === 0) {
+      deckCountNote.textContent = "";
+      colorCard.innerHTML = '<p class="empty-state">Nessun mazzo registrato ancora.</p>';
+      colorDistCard.innerHTML = '<p class="empty-state">Nessun mazzo registrato ancora.</p>';
     } else {
+      deckCountNote.textContent = `Su ${deckStats.totalDecks} mazzi giocati (un torneo conta come un mazzo solo).`;
+
       colorCard.innerHTML = EloApp.COLORS.map((c) => {
         const meta = EloApp.COLOR_META[c];
-        const count = stats.colorCounts[c];
-        const pct = totalColorPicks > 0 ? Math.round((count / totalColorPicks) * 100) : 0;
+        const count = deckStats.colorPresence[c];
+        const pct = Math.round((count / deckStats.totalDecks) * 100);
         return `<div class="color-bar">
           <div class="swatch" style="background:${meta.hex}; color:${meta.text};">${c}</div>
           <div class="track"><div class="fill" style="width:${pct}%; background:${meta.hex};"></div></div>
-          <div class="count">${count}</div>
+          <div class="count">${pct}%</div>
         </div>`;
       }).join("");
+
+      const distLabels = { 0: "Incolore", 1: "Monocolore", 2: "Bicolore", 3: "Tricolore", 4: "4 colori", 5: "5 colori" };
+      colorDistCard.innerHTML = `<div class="deck-dist-grid">${[0, 1, 2, 3, 4, 5]
+        .filter((n) => n > 0 || deckStats.colorCountHist[0] > 0)
+        .map((n) => {
+          const count = deckStats.colorCountHist[n];
+          const pct = Math.round((count / deckStats.totalDecks) * 100);
+          return `<div class="deck-dist-tile"><div class="n">${pct}%</div><div class="lbl">${distLabels[n]} (${count})</div></div>`;
+        })
+        .join("")}</div>`;
     }
 
     // Match history (only this player's matches)
@@ -102,8 +120,10 @@
           const oppColors = isA ? m.colorsB : m.colorsA;
           const badge = myScore > oppScore ? '<span class="badge win">Vittoria</span>' : myScore < oppScore ? '<span class="badge loss">Sconfitta</span>' : '<span class="badge draw">Pareggio</span>';
 
+          const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· Turno ${m.round}</span>` : m.date;
+
           return `<tr>
-            <td>${m.date}</td>
+            <td>${dateLabel}</td>
             <td><a href="player.html?id=${encodeURIComponent(oppId)}">${escapeHtml(oppName)}</a></td>
             <td>${myScore}-${oppScore} ${badge}</td>
             <td>${colorPips(myColors)}</td>

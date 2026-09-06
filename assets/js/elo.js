@@ -51,6 +51,45 @@
   }
 
   /**
+   * Le statistiche sui colori vanno calcolate per MAZZO, non per partita:
+   * in un torneo lo stesso giocatore usa lo stesso mazzo per più turni, e
+   * contare i colori una volta per turno lo peserebbe artificialmente di
+   * più di un giocatore che ha fatto un solo turno con quel mazzo.
+   *
+   * Un "mazzo" è identificato da (tournamentId, playerId); le partite senza
+   * tournamentId (storiche, inserite una alla volta) contano ciascuna come
+   * un mazzo a sé.
+   */
+  function computeDeckStats(playerId, matches) {
+    const deckMap = new Map();
+
+    matches.forEach((m) => {
+      let colors = null;
+      if (m.playerA === playerId) colors = m.colorsA;
+      else if (m.playerB === playerId) colors = m.colorsB;
+      else return;
+
+      const key = m.tournamentId ? `t:${m.tournamentId}` : `m:${m.id}`;
+      if (!deckMap.has(key)) deckMap.set(key, Array.from(new Set(colors || [])));
+    });
+
+    const decks = Array.from(deckMap.values());
+    const totalDecks = decks.length;
+    const colorPresence = emptyColorCounts();
+    const colorCountHist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    decks.forEach((colors) => {
+      colors.forEach((c) => {
+        if (colorPresence[c] != null) colorPresence[c]++;
+      });
+      const n = Math.min(colors.length, 5);
+      colorCountHist[n]++;
+    });
+
+    return { totalDecks, colorPresence, colorCountHist };
+  }
+
+  /**
    * Ricalcola classifica, statistiche e storico Elo per ogni giocatore
    * a partire dall'elenco giocatori e dallo storico partite.
    */
@@ -69,7 +108,6 @@
         matches: 0,
         gamesWon: 0,
         gamesLost: 0,
-        colorCounts: emptyColorCounts(),
         history: [{ date: p.joined || null, elo: cfg.BASE_ELO, matchId: null, delta: 0 }],
       };
     });
@@ -117,13 +155,6 @@
         stB.draws++;
       }
 
-      (m.colorsA || []).forEach((c) => {
-        if (stA.colorCounts[c] != null) stA.colorCounts[c]++;
-      });
-      (m.colorsB || []).forEach((c) => {
-        if (stB.colorCounts[c] != null) stB.colorCounts[c]++;
-      });
-
       stA.history.push({ date: m.date, elo: newRa, matchId: m.id, delta: deltaA });
       stB.history.push({ date: m.date, elo: newRb, matchId: m.id, delta: deltaB });
 
@@ -148,5 +179,6 @@
   window.EloApp.COLORS = COLORS;
   window.EloApp.COLOR_META = COLOR_META;
   window.EloApp.computeStandings = computeStandings;
+  window.EloApp.computeDeckStats = computeDeckStats;
   window.EloApp.sortMatches = sortMatches;
 })(window);

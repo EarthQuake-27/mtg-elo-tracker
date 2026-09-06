@@ -255,3 +255,58 @@ code {
 .chart-area { fill: rgba(109, 63, 192, 0.12); stroke: none; }
 .chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
 .chart-dot { fill: var(--accent); }
+
+/* --- Combobox (autocompletamento giocatore) --- */
+.combobox { position: relative; }
+.combobox-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+.combobox-item { padding: 9px 12px; cursor: pointer; font-size: 0.9rem; }
+.combobox-item:hover, .combobox-item:active { background: var(--surface-alt); }
+.combobox-item-new { color: var(--accent-dark); font-weight: 700; border-top: 1px solid var(--border); }
+.combobox-empty { color: var(--text-muted); cursor: default; }
+.combobox-hint { font-size: 0.78rem; margin-top: 4px; min-height: 1.1em; }
+.hint-existing { color: var(--success); }
+.hint-new { color: var(--accent-dark); }
+
+/* --- Tournament builder --- */
+.participant-row, .matchup-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.participant-row:last-child, .matchup-row:last-child { border-bottom: none; }
+.participant-row .combobox { flex: 1.2; min-width: 160px; }
+.participant-row .colors-col { flex: 2; min-width: 220px; }
+.participant-row .remove-col, .matchup-row .remove-col { flex: 0 0 auto; padding-top: 2px; }
+.row-remove-btn {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+}
+.row-remove-btn:hover { background: var(--surface-alt); color: var(--danger); }
+
+.round-card { margin-bottom: 20px; }
+.round-card h3 { margin: 0 0 12px; font-size: 1.05rem; }
+.matchup-row { flex-wrap: wrap; }
+.matchup-row .vs-select { flex: 1; min-width: 150px; }
+.matchup-row .vs-sep { align-self: center; color: var(--text-muted); font-weight: 700; padding-top: 8px; }
+.matchup-row .outcome-col { flex: 1 1 100%; }
+
+.step-nav { display: flex; gap: 10px; margin-top: 20px; }
+
+.deck-dist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; margin-top: 10px; }
+.deck-dist-tile { text-align: center; background: var(--surface-alt); border-radius: 10px; padding: 12px 8px; }
+.deck-dist-tile .n { font-size: 1.3rem; font-weight: 800; }
+.deck-dist-tile .lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }

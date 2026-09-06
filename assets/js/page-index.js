@@ -48,15 +48,16 @@
         .join("");
 
       if (matchLog.length === 0) {
-        recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Nessuna partita registrata ancora. <a href="new-match.html">Aggiungine una</a>.</td></tr>`;
+        recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Nessuna partita registrata ancora. <a href="new-tournament.html">Aggiungine una</a>.</td></tr>`;
       } else {
         const recent = [...matchLog].reverse().slice(0, 15);
         recentBody.innerHTML = recent
           .map((m) => {
             const sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;
             const sb = 1 - sa;
+            const dateLabel = m.round ? `${m.date} <span style="color:var(--text-muted);">· T${m.round}</span>` : m.date;
             return `<tr>
-              <td>${m.date}</td>
+              <td>${dateLabel}</td>
               <td><a href="player.html?id=${encodeURIComponent(m.playerA)}">${escapeHtml(m.nameA)}</a> ${outcomeBadge(sa)} vs ${outcomeBadge(sb)} <a href="player.html?id=${encodeURIComponent(m.playerB)}">${escapeHtml(m.nameB)}</a></td>
               <td>${m.scoreA} - ${m.scoreB}</td>
               <td class="num">

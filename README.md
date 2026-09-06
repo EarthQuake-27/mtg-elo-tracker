@@ -1,15 +1,31 @@
 # 🃏 Elo del Gruppo — Classifica Elo per Magic: The Gathering
 
 Sito statico, gratuito, ospitato su GitHub Pages, per tenere la classifica Elo
-del tuo gruppo di gioco: inserisci i risultati delle partite (2-0, 2-1, 1-1,
-1-0, 0-0...), i colori del mazzo usato da ciascun giocatore, e il sito calcola
-automaticamente l'Elo di tutti, mostra la classifica generale e le statistiche
-individuali di ogni giocatore.
+del tuo gruppo di gioco: registri un torneo (partecipanti, mazzi, risultati
+turno per turno) e il sito calcola automaticamente l'Elo di tutti, mostra la
+classifica generale e le statistiche individuali di ogni giocatore (winrate,
+colori giocati, quanti colori per mazzo).
 
 Nessun database, nessun server da pagare: i dati vivono in due semplici file
 JSON dentro questo stesso repository (`data/players.json` e
 `data/matches.json`), e l'Elo viene ricalcolato al volo nel browser ogni
 volta che qualcuno apre il sito.
+
+## Come si registra un torneo
+
+Le partite del gruppo non sono mai "una tantum": si gioca sempre in mini-tornei
+di più turni (tipicamente 3) in cui ogni giocatore usa lo stesso mazzo per
+tutto il torneo. Il form **Nuovo Torneo** rispecchia questo:
+
+1. **Partecipanti**: scrivi il nome di ognuno (una casella con suggerimenti —
+   se il nome esiste già te lo propone, altrimenti verrà creato un nuovo
+   giocatore automaticamente) e scegli i colori del suo mazzo, una volta sola
+   per tutto il torneo. Righe libere da aggiungere/rimuovere: tipicamente 8,
+   ma vanno bene anche 6, 10 o qualsiasi numero.
+2. **Risultati**: per ogni turno inserisci i vari incontri (giocatore A vs
+   giocatore B) e il punteggio di ciascuno, come prima.
+3. Un solo click salva tutto il torneo in blocco (uno o due commit in tutto,
+   non uno per partita).
 
 ## Come funziona il calcolo dell'Elo
 
@@ -33,7 +49,7 @@ volta che qualcuno apre il sito.
 index.html          → Classifica generale
 players.html         → Elenco giocatori + form per aggiungerne di nuovi
 player.html          → Statistiche individuali (?id=...)
-new-match.html        → Form per registrare una nuova partita
+new-tournament.html   → Form per registrare un nuovo torneo (partecipanti + risultati turno per turno)
 settings.html        → Configurazione del token GitHub (solo per chi inserisce i dati)
 assets/css/style.css  → Stile del sito
 assets/js/            → Logica (motore Elo, caricamento dati, API GitHub)
@@ -114,7 +130,7 @@ e statistiche, ma non modificarle (a meno che tu non dia loro un token, vedi
 sotto).
 
 ### Passo 6 — Crea il tuo token GitHub (per poter inserire i dati)
-Il sito pubblicato è statico: per permettere al form "Nuova Partita" di
+Il sito pubblicato è statico: per permettere al form "Nuovo Torneo" di
 salvare davvero i dati nel repository, serve un token personale che solo tu
 (o chi inserisce i risultati) userà, direttamente dal browser.
 
@@ -132,9 +148,10 @@ suo localStorage): se apri il sito da un altro computer o telefono dovrai
 incollarlo di nuovo lì. Non condividerlo con nessuno: chi lo possiede può
 modificare i dati del gruppo.
 
-### Passo 7 — Aggiungi i giocatori e le prime partite
-1. Vai su **Giocatori** e aggiungi i membri del gruppo.
-2. Vai su **Nuova Partita** e inizia a registrare i risultati.
+### Passo 7 — Registra il primo torneo
+1. Vai su **Nuovo Torneo**: scrivi i nomi dei partecipanti (vengono creati al
+   volo se non esistono ancora) e i colori dei loro mazzi.
+2. Passa a "risultati" e inserisci i match di ogni turno.
 3. Ogni salvataggio crea un **commit automatico** nel repository: puoi
    sempre vedere lo storico completo delle modifiche nella scheda
    **"Commits"** di GitHub.
