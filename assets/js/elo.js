@@ -66,7 +66,10 @@
     // a stroke straddling the path: a thicker stroke on the same radius
     // would bleed further outward and make that circle a hair bigger than
     // the rest, which is exactly the kind of mismatch we're trying to fix.
-    const strokeColor = code === "W" ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.18)";
+    // A pure-black stroke would itself vanish against a dark background
+    // for the Black icon, so every color uses a theme-neutral mid-gray
+    // ring instead (white gets a stronger, darker one -- see above).
+    const strokeColor = code === "W" ? "rgba(0,0,0,0.45)" : "rgba(128,128,128,0.55)";
     return `<svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block;" aria-hidden="true">
       <circle cx="50" cy="50" r="47" fill="${meta.hex}" stroke="${strokeColor}" stroke-width="3"></circle>
       ${icon}

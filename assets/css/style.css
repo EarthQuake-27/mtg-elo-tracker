@@ -160,7 +160,11 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .color-bar { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
 .color-bar .swatch { width: 22px; height: 22px; flex-shrink: 0; display: block; }
 .color-bar .track { flex: 1; display: flex; background: var(--surface-alt); border-radius: 6px; height: 10px; overflow: hidden; }
-.color-bar .fill { height: 100%; flex-shrink: 0; }
+/* A fill whose color happens to be close to the track's own background
+   (black mana on the dark theme's track, for instance) would otherwise be
+   nearly invisible -- this inset ring keeps every segment's edge visible
+   no matter how it contrasts with the track behind it. */
+.color-bar .fill { height: 100%; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.55); }
 .color-bar .count { min-width: 30px; text-align: right; color: var(--text-muted); font-size: .85rem; white-space: nowrap; }
 .color-bar .bar-label { flex-shrink: 0; font-size: 0.85rem; font-weight: 600; width: 96px; }
 
