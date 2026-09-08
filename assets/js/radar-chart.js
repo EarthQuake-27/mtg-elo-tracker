@@ -70,10 +70,10 @@
     const innerDiscPts = ORDER.map((c, i) => polar(cx, cy, innerR, i * 72));
     const innerDiscFill = `<polygon points="${pointsAttr(innerDiscPts)}" class="radar-inner-disc" />`;
 
-    // One midpoint reference ring per zone (kept faint) plus a bold ring at
-    // each zone's own 100% -- fewer, more purposeful lines than a uniform
-    // 8-ring grid that just looked like one continuous scale.
-    const midRings = ring(mainRadius(50), "radar-grid-ring") + ring(splashRadius(50), "radar-grid-ring");
+    // Just the two zone boundaries, drawn as faint dashed background
+    // markers (not bold data-weight lines) -- the ruler's numbers already
+    // cover the 50% mark, so an extra ring there was one pentagon too many
+    // and started to look like a third data line.
     const boundaryRing = ring(innerR, "radar-boundary-ring"); // main 100% / splash 0%
     const outerRing = ring(outerR, "radar-boundary-ring"); // splash 100%
 
@@ -139,7 +139,6 @@
     container.innerHTML = `
       <svg viewBox="0 0 ${size} ${height}" class="radar-chart-svg" role="img" aria-label="Color presence radar chart">
         ${innerDiscFill}
-        ${midRings}
         ${boundaryRing}
         ${outerRing}
         ${axisLines}

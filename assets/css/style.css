@@ -270,7 +270,7 @@ code {
 .radar-chart-svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible; }
 .radar-inner-disc { fill: rgba(109, 63, 192, 0.05); stroke: none; }
 .radar-grid-ring { fill: none; stroke: var(--border); stroke-width: 1; }
-.radar-boundary-ring { fill: none; stroke: var(--text-muted); stroke-width: 1.4; }
+.radar-boundary-ring { fill: none; stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 3; }
 .radar-axis { stroke: var(--border); stroke-width: 1; }
 .radar-ruler-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 2; }
 .radar-ruler-label { fill: var(--text-muted); font-size: 9px; }
