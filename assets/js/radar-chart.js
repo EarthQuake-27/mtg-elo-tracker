@@ -31,8 +31,14 @@
    */
   function renderColorRadarChart(container, mainPct, splashPct) {
     const size = 260;
+    const height = 270;
     const cx = size / 2;
-    const cy = 118;
+    // White sits at the very top of the pentagon (12 o'clock, same spot as
+    // in Magic's own color wheel), so its label needs the most headroom of
+    // any vertex above the chart's center -- cy leaves enough room for
+    // that top label (icon + text) to stay fully inside the viewBox
+    // instead of poking out above it.
+    const cy = 150;
     const maxR = 72;
     const EloApp = window.EloApp;
 
@@ -81,7 +87,7 @@
     }).join("");
 
     container.innerHTML = `
-      <svg viewBox="0 0 ${size} 236" class="radar-chart-svg" role="img" aria-label="Color presence radar chart">
+      <svg viewBox="0 0 ${size} ${height}" class="radar-chart-svg" role="img" aria-label="Color presence radar chart">
         ${gridRings}
         ${axisLines}
         ${mainShape}
