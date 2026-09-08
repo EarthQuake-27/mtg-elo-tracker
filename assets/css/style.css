@@ -266,6 +266,15 @@ code {
 .chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
 .chart-dot { fill: var(--accent); }
 
+/* --- Color radar ("spiderweb") chart --- */
+.radar-chart-svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible; }
+.radar-grid-ring { fill: none; stroke: var(--border); stroke-width: 1; }
+.radar-axis { stroke: var(--border); stroke-width: 1; }
+.radar-shape-main-fill { fill: rgba(109, 63, 192, 0.18); stroke: none; }
+.radar-shape-main-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.radar-shape-splash-line { fill: none; stroke: var(--accent-dark); stroke-width: 1.5; stroke-dasharray: 4 3; stroke-linejoin: round; opacity: 0.8; }
+.radar-label { fill: var(--text); font-size: 11px; font-weight: 700; }
+
 /* --- Combobox (autocompletamento giocatore) --- */
 .combobox { position: relative; }
 .combobox-list {

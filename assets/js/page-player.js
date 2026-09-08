@@ -82,21 +82,20 @@
     } else {
       deckCountNote.textContent = `Across ${deckStats.totalDecks} deck(s) played (one tournament counts as one deck).`;
 
-      colorCard.innerHTML =
-        EloApp.COLORS.map((c) => {
-          const meta = EloApp.COLOR_META[c];
-          const mainPct = Math.round((deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100);
-          const splashPct = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
-          return `<div class="color-bar">
-            <div class="swatch">${EloApp.colorIconSvg(c)}</div>
-            ${statBar([
-              { pct: mainPct, color: meta.hex, label: `${meta.name} (main)` },
-              { pct: splashPct, color: meta.hex + "88", label: `${meta.name} (splash)` },
-            ])}
-            <div class="count">${mainPct}%<span style="opacity:.6;"> +${splashPct}%</span></div>
-          </div>`;
-        }).join("") +
-        `<div class="legend-row"><span><span class="swatch-dot" style="background:var(--accent);"></span>solid = main color</span><span><span class="swatch-dot" style="background:var(--accent); opacity:.5;"></span>faded = splash</span></div>`;
+      const mainPct = {};
+      const splashPct = {};
+      EloApp.COLORS.forEach((c) => {
+        mainPct[c] = Math.round((deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100);
+        splashPct[c] = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
+      });
+
+      colorCard.innerHTML = `
+        <div id="color-radar"></div>
+        <div class="legend-row" style="justify-content:center; margin-top:4px;">
+          <span><span class="swatch-dot" style="background:var(--accent);"></span>solid = main color</span>
+          <span><span class="swatch-dot" style="background:var(--accent-dark); opacity:.6;"></span>dashed = splash</span>
+        </div>`;
+      EloApp.renderColorRadarChart(document.getElementById("color-radar"), mainPct, splashPct);
     }
 
     // Colors per deck: distribution of how many MAIN colors a deck has,
