@@ -373,5 +373,335 @@
       "Tokens"
     ],
     "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r1_0",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 1,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9dknv",
+    "scoreA": 2,
+    "scoreB": 1,
+    "colorsA": [
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "B",
+      "R"
+    ],
+    "splashA": [
+      "W",
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Combo",
+      "Counters"
+    ],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r1_1",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 1,
+    "playerA": "p_mtrrzxaqgc8g",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [
+      "Aggro",
+      "Discard"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r1_2",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 1,
+    "playerA": "p_mtrrzxaqahsa",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "W",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r1_3",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 1,
+    "playerA": "p_mtrrzxaqsi8g",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "G"
+    ],
+    "splashA": [
+      "U"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r2_4",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 2,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "G"
+    ],
+    "splashA": [
+      "W",
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Combo",
+      "Counters"
+    ],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r2_5",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 2,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "B"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [
+      "Aggro",
+      "Discard"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r2_6",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 2,
+    "playerA": "p_mtrrzxaqgc8g",
+    "playerB": "p_mtq7yme9dknv",
+    "scoreA": 0,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r2_7",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 2,
+    "playerA": "p_mtrrzxaqahsa",
+    "playerB": "p_mtrrzxaqsi8g",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r3_8",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 3,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [
+      "W",
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [
+      "Combo",
+      "Counters"
+    ],
+    "archetypesB": [
+      "Aggro",
+      "Discard"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r3_9",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 3,
+    "playerA": "p_mtq7yme9rckf",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "U",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r3_10",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 3,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mtrrzy70195u_r3_11",
+    "date": "2026-09-07",
+    "tournamentId": "t_mtrrzy70195u",
+    "tournamentName": "Mystery Booster 2",
+    "round": 3,
+    "playerA": "p_mtrrzxaqgc8g",
+    "playerB": "p_mtrrzxaqsi8g",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
   }
 ]
