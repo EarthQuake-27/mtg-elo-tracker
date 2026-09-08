@@ -268,9 +268,12 @@ code {
 
 /* --- Color radar ("spiderweb") chart --- */
 .radar-chart-svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible; }
+.radar-inner-disc { fill: rgba(109, 63, 192, 0.05); stroke: none; }
 .radar-grid-ring { fill: none; stroke: var(--border); stroke-width: 1; }
-.radar-boundary-ring { fill: none; stroke: var(--text-muted); stroke-width: 1.2; stroke-dasharray: 2 3; }
+.radar-boundary-ring { fill: none; stroke: var(--text-muted); stroke-width: 1.4; }
 .radar-axis { stroke: var(--border); stroke-width: 1; }
+.radar-ruler-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 2; }
+.radar-ruler-label { fill: var(--text-muted); font-size: 9px; }
 .radar-shape-main-fill { fill: rgba(109, 63, 192, 0.18); stroke: none; }
 .radar-shape-main-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
 .radar-shape-splash-fill { fill: rgba(109, 63, 192, 0.08); stroke: none; }

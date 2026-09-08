@@ -6,12 +6,14 @@
  *
  * Main-color and splash presence are each 0-100%, but they answer two
  * different questions ("how often is this a main color" vs "how often is
- * it a splash"), so instead of overlaying both on one shared radius (where
- * a small splash shape would just look like a smaller, confusing copy of
- * the main one) they get their own concentric ring: an inner disc for
- * main-color presence, and an outer band -- starting where the inner disc
- * ends -- for splash presence. Two clearly separate "webs", literally
- * nested inside one another.
+ * it a splash"), so instead of overlaying both on one shared radius they
+ * get their own concentric zone: a shaded inner disc for main-color
+ * presence, and an outer band -- starting where the inner disc ends -- for
+ * splash presence. To keep the two scales from reading as one continuous
+ * ruler (which made a 50%-of-inner-disc point look like "25% of the whole
+ * chart"), the inner disc gets a visible tint, the 100% boundary of each
+ * zone is drawn bold, and a small labeled ruler along the empty space
+ * between Black and Red spells out 50%/100% for both zones explicitly.
  */
 (function (window) {
   const ORDER = ["W", "U", "B", "R", "G"];
@@ -36,15 +38,15 @@
 
   /**
    * @param container element to render into
-   * @param mainPct   { W,U,B,R,G: 0-100 } main-color presence percentages (inner ring)
-   * @param splashPct { W,U,B,R,G: 0-100 } splash presence percentages (outer ring)
+   * @param mainPct   { W,U,B,R,G: 0-100 } main-color presence percentages (inner disc)
+   * @param splashPct { W,U,B,R,G: 0-100 } splash presence percentages (outer band)
    */
   function renderColorRadarChart(container, mainPct, splashPct) {
     splashPct = splashPct || {};
     const size = 260;
     const cx = size / 2;
-    const innerR = 44; // full extent of the main-color ring
-    const outerR = 80; // full extent of the splash ring (starts at innerR)
+    const innerR = 44; // full extent of the main-color disc
+    const outerR = 80; // full extent of the splash band (starts at innerR)
     const labelR = outerR + 30;
     // White sits at the very top of the pentagon (12 o'clock, same spot as
     // in Magic's own color wheel), so its label needs the most headroom of
@@ -58,24 +60,45 @@
     const mainRadius = (pct) => (pct / 100) * innerR;
     const splashRadius = (pct) => innerR + (pct / 100) * (outerR - innerR);
 
-    function ringSet(radiusFor) {
-      return [0.25, 0.5, 0.75, 1]
-        .map((level) => {
-          const pts = ORDER.map((c, i) => polar(cx, cy, radiusFor(level * 100), i * 72));
-          return `<polygon points="${pointsAttr(pts)}" class="radar-grid-ring" />`;
-        })
-        .join("");
+    function ring(r, cls) {
+      const pts = ORDER.map((c, i) => polar(cx, cy, r, i * 72));
+      return `<polygon points="${pointsAttr(pts)}" class="${cls}" />`;
     }
 
-    // The boundary between the two rings (main's 100% / splash's 0%) is
-    // drawn on top, a touch bolder, so the two zones read as distinct.
-    const boundaryPts = ORDER.map((c, i) => polar(cx, cy, innerR, i * 72));
-    const boundaryRing = `<polygon points="${pointsAttr(boundaryPts)}" class="radar-boundary-ring" />`;
+    // Filled disc for the inner (main-color) zone, so it visibly reads as
+    // its own bounded region rather than "the middle of one big chart".
+    const innerDiscPts = ORDER.map((c, i) => polar(cx, cy, innerR, i * 72));
+    const innerDiscFill = `<polygon points="${pointsAttr(innerDiscPts)}" class="radar-inner-disc" />`;
+
+    // One midpoint reference ring per zone (kept faint) plus a bold ring at
+    // each zone's own 100% -- fewer, more purposeful lines than a uniform
+    // 8-ring grid that just looked like one continuous scale.
+    const midRings = ring(mainRadius(50), "radar-grid-ring") + ring(splashRadius(50), "radar-grid-ring");
+    const boundaryRing = ring(innerR, "radar-boundary-ring"); // main 100% / splash 0%
+    const outerRing = ring(outerR, "radar-boundary-ring"); // splash 100%
 
     const axisLines = ORDER.map((c, i) => {
       const p = polar(cx, cy, outerR, i * 72);
       return `<line x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" class="radar-axis" />`;
     }).join("");
+
+    // A small labeled ruler in the empty gap between the Black (144°) and
+    // Red (216°) axes -- pointing straight down (180°) -- gives an
+    // absolute reference for both scales instead of leaving the viewer to
+    // guess a percentage purely from a dot's position.
+    const rulerAngle = 180;
+    const rulerTicks = [
+      { r: mainRadius(50), text: "50%" },
+      { r: innerR, text: "100%" },
+      { r: splashRadius(50), text: "50%" },
+      { r: outerR, text: "100%" },
+    ]
+      .map(({ r, text }) => {
+        const p = polar(cx, cy, r, rulerAngle);
+        return `<text x="${(p.x + 6).toFixed(1)}" y="${(p.y + 3).toFixed(1)}" class="radar-ruler-label">${text}</text>`;
+      })
+      .join("");
+    const rulerLine = `<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${(cy + outerR).toFixed(1)}" class="radar-ruler-line" />`;
 
     const mainPts = polygonPoints(mainPct, cx, cy, mainRadius);
     const splashPts = polygonPoints(splashPct, cx, cy, splashRadius);
@@ -115,13 +138,16 @@
 
     container.innerHTML = `
       <svg viewBox="0 0 ${size} ${height}" class="radar-chart-svg" role="img" aria-label="Color presence radar chart">
-        ${ringSet(splashRadius)}
-        ${ringSet(mainRadius)}
+        ${innerDiscFill}
+        ${midRings}
         ${boundaryRing}
+        ${outerRing}
         ${axisLines}
+        ${rulerLine}
         ${mainShape}
         ${splashShape}
         ${dots}
+        ${rulerTicks}
         ${labels}
       </svg>
     `;
