@@ -268,16 +268,11 @@ code {
 
 /* --- Color radar ("spiderweb") chart --- */
 .radar-chart-svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible; }
-.radar-inner-disc { fill: rgba(109, 63, 192, 0.05); stroke: none; }
 .radar-grid-ring { fill: none; stroke: var(--border); stroke-width: 1; }
-.radar-boundary-ring { fill: none; stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 3; }
 .radar-axis { stroke: var(--border); stroke-width: 1; }
-.radar-ruler-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 2; }
-.radar-ruler-label { fill: var(--text-muted); font-size: 9px; }
 .radar-shape-main-fill { fill: rgba(109, 63, 192, 0.18); stroke: none; }
 .radar-shape-main-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
-.radar-shape-splash-fill { fill: rgba(109, 63, 192, 0.08); stroke: none; }
-.radar-shape-splash-line { fill: none; stroke: var(--accent-dark); stroke-width: 1.5; stroke-dasharray: 4 3; stroke-linejoin: round; opacity: 0.85; }
+.radar-shape-total-line { fill: none; stroke: var(--accent-dark); stroke-width: 1.5; stroke-dasharray: 4 3; stroke-linejoin: round; opacity: 0.9; }
 .radar-label { fill: var(--text); font-size: 11px; font-weight: 700; }
 
 /* --- Combobox (autocompletamento giocatore) --- */
