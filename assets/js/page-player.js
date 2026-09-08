@@ -92,8 +92,8 @@
       colorCard.innerHTML = `
         <div id="color-radar"></div>
         <div class="legend-row" style="justify-content:center; margin-top:4px;">
-          <span><span class="swatch-dot" style="background:var(--accent);"></span>solid = main color</span>
-          <span><span class="swatch-dot" style="background:var(--accent-dark); opacity:.6;"></span>dashed = splash</span>
+          <span><span class="swatch-dot" style="background:var(--accent);"></span>inner web = main color</span>
+          <span><span class="swatch-dot" style="background:var(--accent-dark); opacity:.6;"></span>outer web = splash</span>
         </div>`;
       EloApp.renderColorRadarChart(document.getElementById("color-radar"), mainPct, splashPct);
     }
