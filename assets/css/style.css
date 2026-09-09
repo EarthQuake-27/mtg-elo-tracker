@@ -269,7 +269,7 @@ code {
 
 /* --- Color donut charts --- */
 .donut-chart-svg { width: 100%; max-width: 280px; height: auto; display: block; margin: 0 auto; }
-.donut-label { font-size: 17px; font-weight: 800; fill: var(--text); }
+.donut-label { font-size: 14px; font-weight: 800; }
 .donut-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .donut-caption { text-align: center; font-weight: 700; font-size: 0.85rem; color: var(--text-muted); margin: 0 0 8px; }
 

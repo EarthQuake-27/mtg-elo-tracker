@@ -61,10 +61,9 @@
     const cy = size / 2;
     const rInner = opts.rInner || 40;
     const rOuter = opts.rOuter || 118;
-    const labelR = rOuter + 26;
+    const midR = (rInner + rOuter) / 2; // labels sit inside the colored ring itself
     const displayValues = opts.displayValues || values;
     const labelSuffix = opts.labelSuffix || "%";
-    const showZeroLabel = !!opts.showZeroLabel;
 
     let cursor = 0;
     const parts = ORDER.map((c) => {
@@ -76,30 +75,25 @@
       cursor = a1;
 
       if (angle <= 0.01) {
-        if (!showZeroLabel) return "";
-        // Still label a truly-zero slice at its "would be" position so a
-        // color that's simply absent isn't silently omitted from the chart.
-        const mid = a0;
-        const labelP = polar(cx, cy, labelR, mid);
-        return labelAt(labelP, c, "0" + labelSuffix);
+        return ""; // a zero-width slice has no room for a label anyway
       }
 
       const mid = (a0 + a1) / 2;
-      const labelP = polar(cx, cy, labelR, mid);
+      const labelP = polar(cx, cy, midR, mid);
       const dv = Math.round(displayValues[c] != null ? displayValues[c] : v);
       return `
         <path d="${sectorPath(cx, cy, rInner, rOuter, a0, a1)}" fill="${meta.hex}" stroke="var(--surface)" stroke-width="2" class="donut-wedge"><title>${meta.name}: ${dv}${labelSuffix}</title></path>
-        ${labelAt(labelP, c, `${dv}${labelSuffix}`)}
+        ${labelAt(labelP, c, meta.text, `${dv}${labelSuffix}`)}
       `;
     });
 
-    function labelAt(labelP, colorCode, text) {
-      const iconSize = 20;
+    function labelAt(labelP, colorCode, textColor, text) {
+      const iconSize = 18;
       return `
-        <foreignObject x="${(labelP.x - iconSize / 2).toFixed(1)}" y="${(labelP.y - iconSize - 13).toFixed(1)}" width="${iconSize}" height="${iconSize}">
+        <foreignObject x="${(labelP.x - iconSize / 2).toFixed(1)}" y="${(labelP.y - iconSize - 10).toFixed(1)}" width="${iconSize}" height="${iconSize}">
           <div xmlns="http://www.w3.org/1999/xhtml" style="width:${iconSize}px; height:${iconSize}px;">${EloApp.colorIconSvg(colorCode)}</div>
         </foreignObject>
-        <text x="${labelP.x.toFixed(1)}" y="${(labelP.y - 5).toFixed(1)}" text-anchor="middle" class="donut-label">${text}</text>
+        <text x="${labelP.x.toFixed(1)}" y="${(labelP.y + 8).toFixed(1)}" text-anchor="middle" class="donut-label" fill="${textColor}">${text}</text>
       `;
     }
 
