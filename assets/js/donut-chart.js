@@ -1,8 +1,9 @@
 /**
- * Five-slice donut charts, one equal-width slice per WUBRG color (72° each,
- * White at the top going clockwise -- same order as Magic's own color
- * pie), each slice labeled with its own percentage rather than encoding
- * the value through the slice's angle or size. Pure SVG, no dependency.
+ * Proportional donut charts: one slice per WUBRG color (White at the top,
+ * clockwise -- same order as Magic's own color pie), each slice's ANGLE
+ * scaled to its own value relative to the other colors, like a normal pie
+ * chart -- not five fixed equal wedges. A color at 0% (or never played)
+ * gets a zero-width slice, i.e. no slice at all. Pure SVG, no dependency.
  */
 (function (window) {
   const ORDER = ["W", "U", "B", "R", "G"];
@@ -13,10 +14,14 @@
   }
 
   function clampPct(v) {
-    return Math.max(0, Math.min(100, v || 0));
+    return Math.max(0, v || 0);
   }
 
   function sectorPath(cx, cy, rInner, rOuter, a0, a1) {
+    // A true 360° arc is ambiguous for the SVG arc command (same start and
+    // end point), so a single dominant slice is drawn just short of a full
+    // circle -- visually indistinguishable from one.
+    if (a1 - a0 >= 359.99) a1 = a0 + 359.99;
     const p1 = polar(cx, cy, rOuter, a0);
     const p2 = polar(cx, cy, rOuter, a1);
     const p3 = polar(cx, cy, rInner, a1);
@@ -31,86 +36,81 @@
   }
 
   /**
-   * Color presence, main + splash: an inner ring of 5 slices for main-deck
-   * presence, and an outer ring of 5 slices for splash presence, so both
-   * of our criteria show up on the same wheel instead of one number
-   * overwriting the other.
+   * Renders one proportional donut. `values` is { W,U,B,R,G: number >=0 }
+   * (percentages or any comparable magnitude); each slice's share of the
+   * full circle is value / sum(values). Returns false (renders an empty
+   * state instead) if every value is 0.
+   *
+   * @param displayValues optional { W,U,B,R,G } used for the label text
+   *   when it should show something other than `values` itself (e.g. the
+   *   win-rate chart sizes slices by match count but labels them with the
+   *   win rate percentage).
    */
-  function renderColorPresenceDonut(container, mainPct, splashPct) {
-    splashPct = splashPct || {};
+  function renderColorDonut(container, values, opts) {
+    opts = opts || {};
     const EloApp = window.EloApp;
+    const total = ORDER.reduce((sum, c) => sum + clampPct(values[c]), 0);
+
+    if (total <= 0) {
+      container.innerHTML = `<p class="empty-state">${opts.emptyText || "No data yet."}</p>`;
+      return false;
+    }
+
     const size = 300;
     const cx = size / 2;
     const cy = size / 2;
-    const mainInner = 46;
-    const mainOuter = 92;
-    const gap = 6;
-    const splashInner = mainOuter + gap;
-    const splashOuter = splashInner + 32;
+    const rInner = opts.rInner || 40;
+    const rOuter = opts.rOuter || 118;
+    const labelR = rOuter + 26;
+    const displayValues = opts.displayValues || values;
+    const labelSuffix = opts.labelSuffix || "%";
+    const showZeroLabel = !!opts.showZeroLabel;
 
-    const wedges = ORDER.map((c, i) => {
+    let cursor = 0;
+    const parts = ORDER.map((c) => {
       const meta = EloApp.COLOR_META[c];
-      const a0 = i * 72 - 36;
-      const a1 = i * 72 + 36;
-      const mid = i * 72;
-      const mp = Math.round(clampPct(mainPct[c]));
-      const sp = Math.round(clampPct(splashPct[c]));
-      const mainLabelP = polar(cx, cy, (mainInner + mainOuter) / 2, mid);
-      const splashLabelP = polar(cx, cy, (splashInner + splashOuter) / 2, mid);
+      const v = clampPct(values[c]);
+      const angle = (v / total) * 360;
+      const a0 = cursor;
+      const a1 = cursor + angle;
+      cursor = a1;
+
+      if (angle <= 0.01) {
+        if (!showZeroLabel) return "";
+        // Still label a truly-zero slice at its "would be" position so a
+        // color that's simply absent isn't silently omitted from the chart.
+        const mid = a0;
+        const labelP = polar(cx, cy, labelR, mid);
+        return labelAt(labelP, c, "0" + labelSuffix);
+      }
+
+      const mid = (a0 + a1) / 2;
+      const labelP = polar(cx, cy, labelR, mid);
+      const dv = Math.round(displayValues[c] != null ? displayValues[c] : v);
       return `
-        <path d="${sectorPath(cx, cy, mainInner, mainOuter, a0, a1)}" fill="${meta.hex}" stroke="var(--surface)" stroke-width="2" class="donut-wedge"><title>${meta.name} main: ${mp}%</title></path>
-        <path d="${sectorPath(cx, cy, splashInner, splashOuter, a0, a1)}" fill="${meta.hex}" opacity="0.5" stroke="var(--surface)" stroke-width="2" class="donut-wedge"><title>${meta.name} splash: ${sp}%</title></path>
-        <text x="${mainLabelP.x.toFixed(1)}" y="${(mainLabelP.y + 5).toFixed(1)}" text-anchor="middle" class="donut-label" fill="${meta.text}">${mp}%</text>
-        <text x="${splashLabelP.x.toFixed(1)}" y="${(splashLabelP.y + 3).toFixed(1)}" text-anchor="middle" class="donut-label-small">${sp}%</text>
+        <path d="${sectorPath(cx, cy, rInner, rOuter, a0, a1)}" fill="${meta.hex}" stroke="var(--surface)" stroke-width="2" class="donut-wedge"><title>${meta.name}: ${dv}${labelSuffix}</title></path>
+        ${labelAt(labelP, c, `${dv}${labelSuffix}`)}
       `;
-    }).join("");
+    });
+
+    function labelAt(labelP, colorCode, text) {
+      const iconSize = 20;
+      return `
+        <foreignObject x="${(labelP.x - iconSize / 2).toFixed(1)}" y="${(labelP.y - iconSize - 13).toFixed(1)}" width="${iconSize}" height="${iconSize}">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="width:${iconSize}px; height:${iconSize}px;">${EloApp.colorIconSvg(colorCode)}</div>
+        </foreignObject>
+        <text x="${labelP.x.toFixed(1)}" y="${(labelP.y - 5).toFixed(1)}" text-anchor="middle" class="donut-label">${text}</text>
+      `;
+    }
 
     container.innerHTML = `
-      <svg viewBox="0 0 ${size} ${size}" class="donut-chart-svg" role="img" aria-label="Color presence donut chart">
-        ${wedges}
+      <svg viewBox="0 0 ${size} ${size}" class="donut-chart-svg" role="img" aria-label="${opts.ariaLabel || "Color donut chart"}">
+        ${parts.join("")}
       </svg>
     `;
-  }
-
-  /**
-   * Win rate per color: one ring, 5 slices, each labeled with the win rate
-   * across every round played with that color in the deck (main or
-   * splash). A color never played shows as a muted slice with "—".
-   */
-  function renderColorWinrateDonut(container, winRate, matchCounts) {
-    const EloApp = window.EloApp;
-    const size = 280;
-    const cx = size / 2;
-    const cy = size / 2;
-    const rInner = 58;
-    const rOuter = 124;
-
-    const wedges = ORDER.map((c, i) => {
-      const meta = EloApp.COLOR_META[c];
-      const a0 = i * 72 - 36;
-      const a1 = i * 72 + 36;
-      const mid = i * 72;
-      const wr = winRate[c];
-      const n = matchCounts ? matchCounts[c] : 0;
-      const hasData = wr !== null && wr !== undefined;
-      const fill = hasData ? meta.hex : "var(--surface-alt)";
-      const textColor = hasData ? meta.text : "var(--text-muted)";
-      const text = hasData ? `${Math.round(wr)}%` : "—";
-      const labelP = polar(cx, cy, (rInner + rOuter) / 2, mid);
-      return `
-        <path d="${sectorPath(cx, cy, rInner, rOuter, a0, a1)}" fill="${fill}" stroke="var(--surface)" stroke-width="2" class="donut-wedge"><title>${meta.name}: ${hasData ? Math.round(wr) + "% win rate" : "not played"} (${n} game${n === 1 ? "" : "s"})</title></path>
-        <text x="${labelP.x.toFixed(1)}" y="${(labelP.y + 5).toFixed(1)}" text-anchor="middle" class="donut-label" fill="${textColor}">${text}</text>
-      `;
-    }).join("");
-
-    container.innerHTML = `
-      <svg viewBox="0 0 ${size} ${size}" class="donut-chart-svg" role="img" aria-label="Win rate by color donut chart">
-        ${wedges}
-      </svg>
-    `;
+    return true;
   }
 
   window.EloApp = window.EloApp || {};
-  window.EloApp.renderColorPresenceDonut = renderColorPresenceDonut;
-  window.EloApp.renderColorWinrateDonut = renderColorWinrateDonut;
+  window.EloApp.renderColorDonut = renderColorDonut;
 })(window);

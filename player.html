@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Player Stats – Playgroup Elo</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%83%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=13">
+<link rel="stylesheet" href="assets/css/style.css?v=14">
 </head>
 <body>
 
@@ -50,11 +50,19 @@
 
     <h2>Colors Played</h2>
     <p class="subtitle" id="deck-count-note"></p>
-    <div class="card" id="color-usage-card"></div>
-    <p class="footer-note">Inner ring = main color · outer, fainter ring = splash.</p>
+    <div class="donut-grid">
+      <div>
+        <p class="donut-caption">Main colors</p>
+        <div class="card" id="color-main-donut-card"></div>
+      </div>
+      <div>
+        <p class="donut-caption">Splash</p>
+        <div class="card" id="color-splash-donut-card"></div>
+      </div>
+    </div>
 
     <h2>Win Rate by Color</h2>
-    <p class="subtitle">Win rate across every round played with that color in the deck, main or splash.</p>
+    <p class="subtitle">Win rate across every round played with that color in the deck, main or splash. Slice size = win rate; a color never won with has no slice.</p>
     <div class="card" id="color-winrate-card"></div>
 
     <h2>Colors per Deck</h2>
@@ -86,13 +94,13 @@
   </div>
 </div>
 
-<script src="assets/js/config.js?v=13"></script>
-<script src="assets/js/elo.js?v=13"></script>
-<script src="assets/js/data.js?v=13"></script>
-<script src="assets/js/github-api.js?v=13"></script>
-<script src="assets/js/sparkline.js?v=13"></script>
-<script src="assets/js/donut-chart.js?v=13"></script>
-<script src="assets/js/ui-helpers.js?v=13"></script>
-<script src="assets/js/page-player.js?v=13"></script>
+<script src="assets/js/config.js?v=14"></script>
+<script src="assets/js/elo.js?v=14"></script>
+<script src="assets/js/data.js?v=14"></script>
+<script src="assets/js/github-api.js?v=14"></script>
+<script src="assets/js/sparkline.js?v=14"></script>
+<script src="assets/js/donut-chart.js?v=14"></script>
+<script src="assets/js/ui-helpers.js?v=14"></script>
+<script src="assets/js/page-player.js?v=14"></script>
 </body>
 </html>

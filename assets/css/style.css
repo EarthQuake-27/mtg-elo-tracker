@@ -262,14 +262,16 @@ code {
 .elo-chart-svg { width: 100%; height: auto; display: block; }
 .chart-grid { stroke: var(--border); stroke-width: 1; }
 .chart-axis-label { fill: var(--text-muted); font-size: 10px; }
+.chart-date-label { font-size: 9px; }
 .chart-area { fill: rgba(109, 63, 192, 0.12); stroke: none; }
 .chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
 .chart-dot { fill: var(--accent); }
 
 /* --- Color donut charts --- */
 .donut-chart-svg { width: 100%; max-width: 280px; height: auto; display: block; margin: 0 auto; }
-.donut-label { font-size: 17px; font-weight: 800; }
-.donut-label-small { font-size: 11px; font-weight: 700; fill: var(--text); }
+.donut-label { font-size: 17px; font-weight: 800; fill: var(--text); }
+.donut-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.donut-caption { text-align: center; font-weight: 700; font-size: 0.85rem; color: var(--text-muted); margin: 0 0 8px; }
 
 /* --- Combobox (autocompletamento giocatore) --- */
 .combobox { position: relative; }

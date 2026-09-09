@@ -1,15 +1,21 @@
 /**
  * Small line chart for Elo over time, drawn as plain SVG (no external
  * library: nothing to download, nothing to keep updated, works offline).
+ *
+ * Points are placed on a genuine time axis (proportional to how many days
+ * actually separate two matches), not just evenly spaced by index -- a
+ * long gap between tournaments shows up as a long flat stretch, and a
+ * flurry of matches on the same day cluster tightly together. Each point
+ * gets its own date label along the bottom.
  */
 (function (window) {
   function renderEloChart(container, history) {
     const W = 640;
-    const H = 220;
+    const H = 250;
     const PAD_L = 44;
     const PAD_R = 16;
     const PAD_T = 16;
-    const PAD_B = 30;
+    const PAD_B = 56;
 
     const values = history.map((h) => h.elo);
     let min = Math.min(...values);
@@ -25,7 +31,20 @@
     const innerW = W - PAD_L - PAD_R;
     const innerH = H - PAD_T - PAD_B;
 
-    const xFor = (i) => PAD_L + (history.length === 1 ? innerW / 2 : (i / (history.length - 1)) * innerW);
+    const timestamps = history.map((h) => (h.date ? new Date(h.date).getTime() : NaN));
+    const validTs = timestamps.filter((t) => !isNaN(t));
+    const minTs = validTs.length ? Math.min(...validTs) : 0;
+    const maxTs = validTs.length ? Math.max(...validTs) : 0;
+    const hasTimeSpread = validTs.length === timestamps.length && maxTs > minTs;
+
+    const xFor = (i) => {
+      if (hasTimeSpread) {
+        return PAD_L + ((timestamps[i] - minTs) / (maxTs - minTs)) * innerW;
+      }
+      // No usable date spread (missing dates, or every point on the same
+      // day) -- fall back to even spacing by index.
+      return PAD_L + (history.length === 1 ? innerW / 2 : (i / (history.length - 1)) * innerW);
+    };
     const yFor = (v) => PAD_T + innerH - ((v - min) / (max - min)) * innerH;
 
     const points = history.map((h, i) => ({ x: xFor(i), y: yFor(h.elo), h }));
@@ -47,8 +66,21 @@
       )
       .join("");
 
-    const firstLabel = history[0].date || "Start";
-    const lastLabel = history[history.length - 1].date || "";
+    // A date label under every point would overlap into an unreadable
+    // smear when several matches land close together, so a label is only
+    // drawn once there's enough horizontal room since the last one --
+    // the first and last points always get one regardless.
+    const minLabelGap = 34;
+    let lastLabelX = -Infinity;
+    const dateLabels = points
+      .map((p, i) => {
+        const isEdge = i === 0 || i === points.length - 1;
+        if (!isEdge && p.x - lastLabelX < minLabelGap) return "";
+        lastLabelX = p.x;
+        const label = p.h.date || "Start";
+        return `<text x="0" y="0" transform="translate(${p.x.toFixed(1)}, ${(H - PAD_B + 14).toFixed(1)}) rotate(-40)" text-anchor="end" class="chart-axis-label chart-date-label">${label}</text>`;
+      })
+      .join("");
 
     container.innerHTML = `
       <svg viewBox="0 0 ${W} ${H}" class="elo-chart-svg" preserveAspectRatio="none" role="img" aria-label="Elo over time">
@@ -56,8 +88,7 @@
         <path d="${areaPath}" class="chart-area" />
         <path d="${linePath}" class="chart-line" />
         ${dots}
-        <text x="${PAD_L}" y="${H - 6}" class="chart-axis-label">${firstLabel}</text>
-        <text x="${W - PAD_R}" y="${H - 6}" text-anchor="end" class="chart-axis-label">${lastLabel}</text>
+        ${dateLabels}
       </svg>
     `;
   }

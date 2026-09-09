@@ -73,37 +73,44 @@
     }
 
     // Colors played: main-color presence and splash presence, per color.
-    const colorCard = document.getElementById("color-usage-card");
+    // Each donut is proportional -- a color's slice size reflects its
+    // share of that deck-count total, so a color never used as (say) a
+    // splash simply has no slice on the splash donut.
     const deckCountNote = document.getElementById("deck-count-note");
+    const mainDonutCard = document.getElementById("color-main-donut-card");
+    const splashDonutCard = document.getElementById("color-splash-donut-card");
 
     if (deckStats.totalDecks === 0) {
       deckCountNote.textContent = "";
-      colorCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
+      mainDonutCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
+      splashDonutCard.innerHTML = '<p class="empty-state">No decks recorded yet.</p>';
     } else {
       deckCountNote.textContent = `Across ${deckStats.totalDecks} deck(s) played (one tournament counts as one deck).`;
-
-      const mainPct = {};
-      const splashPct = {};
-      EloApp.COLORS.forEach((c) => {
-        mainPct[c] = Math.round((deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100);
-        splashPct[c] = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
+      EloApp.renderColorDonut(mainDonutCard, deckStats.colorPresenceMain, {
+        displayValues: EloApp.COLORS.reduce((o, c) => ((o[c] = (deckStats.colorPresenceMain[c] / deckStats.totalDecks) * 100), o), {}),
+        ariaLabel: "Main color presence donut chart",
+        emptyText: "No main colors recorded yet.",
       });
-
-      colorCard.innerHTML = `<div id="color-donut"></div>`;
-      EloApp.renderColorPresenceDonut(document.getElementById("color-donut"), mainPct, splashPct);
+      EloApp.renderColorDonut(splashDonutCard, deckStats.colorPresenceSplash, {
+        displayValues: EloApp.COLORS.reduce((o, c) => ((o[c] = (deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100), o), {}),
+        ariaLabel: "Splash color presence donut chart",
+        emptyText: "This player hasn't splashed any color yet.",
+      });
     }
 
     // Win rate per color: across every round played with that color in
-    // the deck (main or splash), regardless of how many decks that spans.
+    // the deck (main or splash). Slice size is the win rate itself, so a
+    // color that's never been won with has no slice at all.
     const winStats = EloApp.computeColorWinStats(playerId, matches);
     const winrateCard = document.getElementById("color-winrate-card");
-    const anyColorPlayed = EloApp.COLORS.some((c) => winStats.matchCounts[c] > 0);
-    if (!anyColorPlayed) {
-      winrateCard.innerHTML = '<p class="empty-state">No matches recorded yet.</p>';
-    } else {
-      winrateCard.innerHTML = `<div id="color-winrate-donut"></div>`;
-      EloApp.renderColorWinrateDonut(document.getElementById("color-winrate-donut"), winStats.winRate, winStats.matchCounts);
-    }
+    const winRateForSizing = {};
+    EloApp.COLORS.forEach((c) => {
+      winRateForSizing[c] = winStats.winRate[c] || 0;
+    });
+    EloApp.renderColorDonut(winrateCard, winRateForSizing, {
+      ariaLabel: "Win rate by color donut chart",
+      emptyText: "No matches recorded yet.",
+    });
 
     // Colors per deck: distribution of how many MAIN colors a deck has,
     // plus how often a splash color was added on top.
