@@ -276,10 +276,57 @@
     return { totalDecks, colorPresenceMain, colorPresenceSplash, colorCountHist, splashDeckCount, archetypeCounts };
   }
 
+  /**
+   * Win rate per color: unlike deck presence (deduped per tournament),
+   * this counts every ROUND actually played, since each round is an
+   * independent game result. A color counts toward a round if it was
+   * either a main or a splash color of that player's deck for that match.
+   */
+  function computeColorWinStats(playerId, matches) {
+    const byColor = {};
+    COLORS.forEach((c) => {
+      byColor[c] = { wins: 0, draws: 0, losses: 0, matches: 0 };
+    });
+
+    matches.forEach((m) => {
+      let myColors = null;
+      let sa = null;
+      if (m.playerA === playerId) {
+        myColors = [...(m.colorsA || []), ...(m.splashA || [])];
+        sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;
+      } else if (m.playerB === playerId) {
+        myColors = [...(m.colorsB || []), ...(m.splashB || [])];
+        sa = m.scoreB > m.scoreA ? 1 : m.scoreB < m.scoreA ? 0 : 0.5;
+      } else {
+        return;
+      }
+
+      Array.from(new Set(myColors)).forEach((c) => {
+        const st = byColor[c];
+        if (!st) return;
+        st.matches++;
+        if (sa === 1) st.wins++;
+        else if (sa === 0) st.losses++;
+        else st.draws++;
+      });
+    });
+
+    const winRate = {};
+    const matchCounts = {};
+    COLORS.forEach((c) => {
+      const st = byColor[c];
+      matchCounts[c] = st.matches;
+      winRate[c] = st.matches > 0 ? ((st.wins + st.draws * 0.5) / st.matches) * 100 : null;
+    });
+
+    return { byColor, winRate, matchCounts };
+  }
+
   window.EloApp.COLORS = COLORS;
   window.EloApp.COLOR_META = COLOR_META;
   window.EloApp.colorIconSvg = colorIconSvg;
   window.EloApp.computeStandings = computeStandings;
   window.EloApp.computeDeckStats = computeDeckStats;
+  window.EloApp.computeColorWinStats = computeColorWinStats;
   window.EloApp.sortMatches = sortMatches;
 })(window);

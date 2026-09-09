@@ -89,13 +89,20 @@
         splashPct[c] = Math.round((deckStats.colorPresenceSplash[c] / deckStats.totalDecks) * 100);
       });
 
-      colorCard.innerHTML = `
-        <div id="color-radar"></div>
-        <div class="legend-row" style="justify-content:center; margin-top:4px;">
-          <span><span class="swatch-dot" style="background:var(--accent);"></span>solid = main color</span>
-          <span><span class="swatch-dot" style="background:var(--accent-dark); opacity:.6;"></span>dashed = main + splash</span>
-        </div>`;
-      EloApp.renderColorRadarChart(document.getElementById("color-radar"), mainPct, splashPct);
+      colorCard.innerHTML = `<div id="color-donut"></div>`;
+      EloApp.renderColorPresenceDonut(document.getElementById("color-donut"), mainPct, splashPct);
+    }
+
+    // Win rate per color: across every round played with that color in
+    // the deck (main or splash), regardless of how many decks that spans.
+    const winStats = EloApp.computeColorWinStats(playerId, matches);
+    const winrateCard = document.getElementById("color-winrate-card");
+    const anyColorPlayed = EloApp.COLORS.some((c) => winStats.matchCounts[c] > 0);
+    if (!anyColorPlayed) {
+      winrateCard.innerHTML = '<p class="empty-state">No matches recorded yet.</p>';
+    } else {
+      winrateCard.innerHTML = `<div id="color-winrate-donut"></div>`;
+      EloApp.renderColorWinrateDonut(document.getElementById("color-winrate-donut"), winStats.winRate, winStats.matchCounts);
     }
 
     // Colors per deck: distribution of how many MAIN colors a deck has,
