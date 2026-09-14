@@ -322,11 +322,122 @@
     return { byColor, winRate, matchCounts };
   }
 
+  /**
+   * One row per tournament a player took part in (most recent first),
+   * aggregating that tournament's rounds into a single record (e.g.
+   * "3-0") plus the Elo the player had right before the tournament and
+   * right after it -- reusing the before/after Elo already attached to
+   * each match by computeStandings, so no extra history lookup is needed.
+   * Matches without a tournamentId (legacy, entered one at a time) each
+   * form their own one-round "tournament".
+   */
+  function computeTournamentSummaries(playerId, matchLog) {
+    const groups = new Map();
+
+    matchLog.forEach((m) => {
+      let isA;
+      if (m.playerA === playerId) isA = true;
+      else if (m.playerB === playerId) isA = false;
+      else return;
+
+      const key = m.tournamentId || `standalone:${m.id}`;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          key,
+          tournamentId: m.tournamentId || null,
+          tournamentName: m.tournamentName || "",
+          date: m.date,
+          colors: isA ? m.colorsA : m.colorsB,
+          splash: isA ? m.splashA : m.splashB,
+          archetypes: isA ? m.archetypesA : m.archetypesB,
+          wins: 0,
+          draws: 0,
+          losses: 0,
+          matches: 0,
+          eloBefore: isA ? m.eloABefore : m.eloBBefore,
+          eloAfter: isA ? m.eloAAfter : m.eloBAfter,
+        });
+      }
+      const g = groups.get(key);
+      const myScore = isA ? m.scoreA : m.scoreB;
+      const oppScore = isA ? m.scoreB : m.scoreA;
+      g.matches++;
+      if (myScore > oppScore) g.wins++;
+      else if (myScore < oppScore) g.losses++;
+      else g.draws++;
+      // matchLog is chronological, so the running eloAfter always ends up
+      // as the value after this tournament's LAST round for the player.
+      g.eloAfter = isA ? m.eloAAfter : m.eloBAfter;
+      if (m.date > g.date) g.date = m.date;
+    });
+
+    return Array.from(groups.values()).sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+
+  /**
+   * Group-wide archetype stats: how many decks (across every player)
+   * carried each archetype tag, and the win rate across every round
+   * played with that tag in the deck. Same per-tag counting as the
+   * per-player version (a "Reanimator + Control" deck counts once toward
+   * each tag), just aggregated over the whole group instead of one player.
+   */
+  function computeGlobalArchetypeStats(matches) {
+    const deckMap = new Map();
+    const winStats = {};
+
+    function bumpWin(name, s) {
+      if (!winStats[name]) winStats[name] = { wins: 0, draws: 0, losses: 0, matches: 0 };
+      const st = winStats[name];
+      st.matches++;
+      if (s === 1) st.wins++;
+      else if (s === 0) st.losses++;
+      else st.draws++;
+    }
+
+    matches.forEach((m) => {
+      const sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;
+      const sides = [
+        { playerId: m.playerA, archetypes: m.archetypesA, s: sa, tKey: m.tournamentId || m.id },
+        { playerId: m.playerB, archetypes: m.archetypesB, s: 1 - sa, tKey: m.tournamentId || m.id },
+      ];
+      sides.forEach(({ playerId, archetypes, s, tKey }) => {
+        const uniq = Array.from(new Set(archetypes || []));
+        const deckKey = `${playerId}|${tKey}`;
+        if (!deckMap.has(deckKey)) deckMap.set(deckKey, uniq);
+        uniq.forEach((a) => bumpWin(a, s));
+        if (uniq.length === 0) bumpWin("Unspecified", s);
+      });
+    });
+
+    const occurrences = {};
+    deckMap.forEach((archetypes) => {
+      const list = archetypes.length === 0 ? ["Unspecified"] : archetypes;
+      list.forEach((a) => {
+        occurrences[a] = (occurrences[a] || 0) + 1;
+      });
+    });
+
+    const names = new Set([...Object.keys(occurrences), ...Object.keys(winStats)]);
+    return Array.from(names)
+      .map((name) => {
+        const w = winStats[name] || { wins: 0, draws: 0, losses: 0, matches: 0 };
+        return {
+          name,
+          occurrences: occurrences[name] || 0,
+          matches: w.matches,
+          winRate: w.matches > 0 ? ((w.wins + w.draws * 0.5) / w.matches) * 100 : null,
+        };
+      })
+      .sort((a, b) => b.occurrences - a.occurrences);
+  }
+
   window.EloApp.COLORS = COLORS;
   window.EloApp.COLOR_META = COLOR_META;
   window.EloApp.colorIconSvg = colorIconSvg;
   window.EloApp.computeStandings = computeStandings;
   window.EloApp.computeDeckStats = computeDeckStats;
   window.EloApp.computeColorWinStats = computeColorWinStats;
+  window.EloApp.computeTournamentSummaries = computeTournamentSummaries;
+  window.EloApp.computeGlobalArchetypeStats = computeGlobalArchetypeStats;
   window.EloApp.sortMatches = sortMatches;
 })(window);

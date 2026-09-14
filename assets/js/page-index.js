@@ -1,12 +1,14 @@
 (async function () {
   const { EloApp } = window;
   const cfg = EloApp.CONFIG;
+  const { escapeHtml, colorPips, archetypeLine } = EloApp;
   document.getElementById("brand-name").textContent = cfg.SITE_NAME;
   document.getElementById("cfg-base-elo").textContent = cfg.BASE_ELO;
   document.getElementById("cfg-base-k").textContent = cfg.BASE_K;
 
   const msgArea = document.getElementById("msg-area");
   const rankingBody = document.getElementById("ranking-body");
+  const summaryBody = document.getElementById("tournament-summary-body");
   const recentBody = document.getElementById("recent-body");
   const latestTournamentSubtitle = document.getElementById("latest-tournament-subtitle");
 
@@ -24,10 +26,15 @@
     return '<span class="badge draw">D</span>';
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+  function eloArrow(before, after) {
+    // Compare the rounded values actually shown, so the arrow never
+    // contradicts what's displayed (e.g. "1016 → 1016" when the real
+    // underlying numbers differ by a fraction that rounds away).
+    const b = Math.round(before);
+    const a = Math.round(after);
+    if (a > b) return '<span class="delta-pos">↑</span>';
+    if (a < b) return '<span class="delta-neg">↓</span>';
+    return '<span style="color:var(--text-muted);">→</span>';
   }
 
   /** Groups the flat match log into tournaments (matches without a
@@ -75,9 +82,35 @@
       const latest = findLatestTournament(matchLog);
       if (!latest) {
         latestTournamentSubtitle.textContent = "";
+        summaryBody.innerHTML = `<tr><td colspan="4" class="empty-state">No tournament recorded yet. <a href="new-tournament.html">Add one</a>.</td></tr>`;
         recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">No tournament recorded yet. <a href="new-tournament.html">Add one</a>.</td></tr>`;
       } else {
         latestTournamentSubtitle.textContent = latest.name ? `${latest.name} · Played on ${latest.date}` : `Played on ${latest.date}`;
+
+        // Per-player summary: deck, archetype, combined record, Elo before -> after.
+        const participantIds = Array.from(new Set(latest.matches.flatMap((m) => [m.playerA, m.playerB])));
+        const summaries = participantIds
+          .map((id) => {
+            const rows = EloApp.computeTournamentSummaries(id, matchLog);
+            const row = rows.find((r) => r.key === latest.key);
+            if (!row) return null;
+            const player = standings.find((s) => s.id === id);
+            return { id, name: player ? player.name : "?", ...row };
+          })
+          .filter(Boolean)
+          .sort((a, b) => b.wins - a.wins || b.draws - a.draws || b.eloAfter - a.eloAfter);
+
+        summaryBody.innerHTML = summaries
+          .map(
+            (r) => `<tr>
+              <td><a class="player-link" href="player.html?id=${encodeURIComponent(r.id)}">${escapeHtml(r.name)}</a></td>
+              <td>${colorPips(r.colors, r.splash)}${archetypeLine(r.archetypes)}</td>
+              <td>${r.wins}-${r.draws}-${r.losses}</td>
+              <td class="num">${Math.round(r.eloBefore)} ${eloArrow(r.eloBefore, r.eloAfter)} ${Math.round(r.eloAfter)}</td>
+            </tr>`
+          )
+          .join("");
+
         recentBody.innerHTML = latest.matches
           .map((m) => {
             const sa = m.scoreA > m.scoreB ? 1 : m.scoreA < m.scoreB ? 0 : 0.5;
@@ -100,6 +133,7 @@
   } catch (err) {
     showError(err);
     rankingBody.innerHTML = `<tr><td colspan="6" class="empty-state">Error loading data.</td></tr>`;
+    summaryBody.innerHTML = `<tr><td colspan="4" class="empty-state">Error loading data.</td></tr>`;
     recentBody.innerHTML = `<tr><td colspan="4" class="empty-state">Error loading data.</td></tr>`;
   }
 })();

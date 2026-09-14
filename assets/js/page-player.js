@@ -159,6 +159,28 @@
         .join("");
     }
 
+    // Tournaments: one row per tournament, aggregating its rounds into a
+    // single record (e.g. "3-0") and the Elo change across the whole thing.
+    const tournamentsBody = document.getElementById("tournaments-body");
+    const tournamentSummaries = EloApp.computeTournamentSummaries(playerId, matchLog);
+    if (tournamentSummaries.length === 0) {
+      tournamentsBody.innerHTML = '<tr><td colspan="5" class="empty-state">No tournaments recorded yet.</td></tr>';
+    } else {
+      tournamentsBody.innerHTML = tournamentSummaries
+        .map((t) => {
+          const nameCell = t.tournamentName ? escapeHtml(t.tournamentName) : "—";
+          const eloDiff = t.eloAfter - t.eloBefore;
+          return `<tr>
+            <td>${t.date}</td>
+            <td>${nameCell}</td>
+            <td>${colorPips(t.colors, t.splash)}${archetypeLine(t.archetypes)}</td>
+            <td>${t.wins}-${t.draws}-${t.losses}</td>
+            <td class="num">${Math.round(t.eloBefore)} → ${Math.round(t.eloAfter)} <span class="${eloDiff >= 0 ? "delta-pos" : "delta-neg"}">(${eloDiff >= 0 ? "+" : ""}${eloDiff.toFixed(1)})</span></td>
+          </tr>`;
+        })
+        .join("");
+    }
+
     // Match history (only this player's matches)
     const myMatches = matchLog.filter((m) => m.playerA === playerId || m.playerB === playerId).reverse();
     const matchesBody = document.getElementById("matches-body");

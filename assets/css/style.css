@@ -273,6 +273,11 @@ code {
 .donut-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .donut-caption { text-align: center; font-weight: 700; font-size: 0.85rem; color: var(--text-muted); margin: 0 0 8px; }
 
+/* --- Dual bar chart (occurrences + win rate) --- */
+.bar-chart-svg { display: block; }
+.bar-chart-bar { }
+.bar-chart-value { fill: var(--text); font-size: 10px; font-weight: 700; }
+
 /* --- Combobox (autocompletamento giocatore) --- */
 .combobox { position: relative; }
 .combobox-list {
