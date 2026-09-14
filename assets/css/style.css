@@ -343,6 +343,24 @@ code {
 
 .round-card { margin-bottom: 20px; }
 .round-card h3 { margin: 0 0 12px; font-size: 1.05rem; }
+
+/* --- Tournaments list --- */
+.tournament-card-header { margin-bottom: 14px; }
+.tournament-card-header h3 { margin: 0 0 4px; font-size: 1.1rem; }
+.tournament-card-header .subtitle { margin: 0; }
+details.round-detail { margin-top: 14px; }
+details.round-detail summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--accent-dark);
+  padding: 4px 0;
+  list-style: none;
+}
+details.round-detail summary::-webkit-details-marker { display: none; }
+details.round-detail summary::before { content: "▸ "; }
+details.round-detail[open] summary::before { content: "▾ "; }
+details.round-detail .table-scroll { margin-top: 10px; }
 .matchup-row .vs-select { flex: 1; min-width: 150px; }
 .matchup-row .vs-sep { align-self: center; color: var(--text-muted); font-weight: 700; padding-top: 8px; }
 .matchup-row .outcome-col { flex: 1 1 100%; }

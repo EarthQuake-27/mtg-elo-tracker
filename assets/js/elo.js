@@ -431,6 +431,79 @@
       .sort((a, b) => b.occurrences - a.occurrences);
   }
 
+  /**
+   * One entry per tournament ever played (most recent first): its rounds
+   * (raw matchLog entries, in round order) plus a final standings list for
+   * that tournament alone -- every participant's deck, combined record and
+   * Elo right before/after the tournament, ranked the same way the
+   * homepage's per-tournament summary is (wins, then draws, then final
+   * Elo). Reuses the before/after Elo already attached to each match by
+   * computeStandings. Matches without a tournamentId (legacy, entered one
+   * at a time) each form their own one-round "tournament".
+   */
+  function computeAllTournaments(matchLog) {
+    const groups = new Map();
+
+    matchLog.forEach((m) => {
+      const key = m.tournamentId || `standalone:${m.id}`;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          key,
+          tournamentId: m.tournamentId || null,
+          name: m.tournamentName || "",
+          date: m.date,
+          rounds: [],
+          participants: new Map(),
+        });
+      }
+      const g = groups.get(key);
+      g.rounds.push(m);
+      if (m.date > g.date) g.date = m.date;
+
+      [true, false].forEach((isA) => {
+        const playerId = isA ? m.playerA : m.playerB;
+        if (!g.participants.has(playerId)) {
+          g.participants.set(playerId, {
+            id: playerId,
+            name: isA ? m.nameA : m.nameB,
+            colors: isA ? m.colorsA : m.colorsB,
+            splash: isA ? m.splashA : m.splashB,
+            archetypes: isA ? m.archetypesA : m.archetypesB,
+            wins: 0,
+            draws: 0,
+            losses: 0,
+            matches: 0,
+            eloBefore: isA ? m.eloABefore : m.eloBBefore,
+            eloAfter: isA ? m.eloAAfter : m.eloBAfter,
+          });
+        }
+        const p = g.participants.get(playerId);
+        const myScore = isA ? m.scoreA : m.scoreB;
+        const oppScore = isA ? m.scoreB : m.scoreA;
+        p.matches++;
+        if (myScore > oppScore) p.wins++;
+        else if (myScore < oppScore) p.losses++;
+        else p.draws++;
+        // matchLog is chronological, so the running eloAfter always ends
+        // up as the value after this participant's LAST round.
+        p.eloAfter = isA ? m.eloAAfter : m.eloBAfter;
+      });
+    });
+
+    return Array.from(groups.values())
+      .map((g) => ({
+        key: g.key,
+        tournamentId: g.tournamentId,
+        name: g.name,
+        date: g.date,
+        rounds: g.rounds.sort((a, b) => (a.round || 0) - (b.round || 0)),
+        participants: Array.from(g.participants.values()).sort(
+          (a, b) => b.wins - a.wins || b.draws - a.draws || b.eloAfter - a.eloAfter
+        ),
+      }))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+
   window.EloApp.COLORS = COLORS;
   window.EloApp.COLOR_META = COLOR_META;
   window.EloApp.colorIconSvg = colorIconSvg;
@@ -439,5 +512,6 @@
   window.EloApp.computeColorWinStats = computeColorWinStats;
   window.EloApp.computeTournamentSummaries = computeTournamentSummaries;
   window.EloApp.computeGlobalArchetypeStats = computeGlobalArchetypeStats;
+  window.EloApp.computeAllTournaments = computeAllTournaments;
   window.EloApp.sortMatches = sortMatches;
 })(window);
