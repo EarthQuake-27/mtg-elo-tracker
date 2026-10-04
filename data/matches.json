@@ -931,5 +931,311 @@
     "archetypesA": [],
     "archetypesB": [],
     "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r1_0",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 1,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mtq7yme9bjf6",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [
+      "G"
+    ],
+    "splashB": [
+      "B"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r1_1",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 1,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "B"
+    ],
+    "splashA": [
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r1_2",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 1,
+    "playerA": "p_muabgikw25j0",
+    "playerB": "p_muu7ctq2xy91",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r1_3",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 1,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_muu7ctq2vonk",
+    "scoreA": 1,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "U"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r2_4",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 2,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "U",
+      "B"
+    ],
+    "splashA": [
+      "G"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r2_5",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 2,
+    "playerA": "p_mtq7yme9feqx",
+    "playerB": "p_muabgikw25j0",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r2_6",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 2,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mtq7yme9bjf6",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "U"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "B"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r2_7",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 2,
+    "playerA": "p_muu7ctq2xy91",
+    "playerB": "p_muu7ctq2vonk",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r3_8",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 3,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_muu7ctq2vonk",
+    "scoreA": 2,
+    "scoreB": 1,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [
+      "G"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r3_9",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 3,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_muabgikw25j0",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [
+      "B"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r3_10",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 3,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mtq7yme9feqx",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "U"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "B"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_muu7cuim25w0_r3_11",
+    "date": "2026-10-04",
+    "tournamentId": "t_muu7cuim25w0",
+    "tournamentName": "Reality Fractured!!!",
+    "round": 3,
+    "playerA": "p_muu7ctq2xy91",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
   }
 ]
