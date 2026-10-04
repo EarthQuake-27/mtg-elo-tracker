@@ -2,11 +2,12 @@
  * Small line chart for Elo over time, drawn as plain SVG (no external
  * library: nothing to download, nothing to keep updated, works offline).
  *
- * Points are placed on a genuine time axis (proportional to how many days
- * actually separate two matches), not just evenly spaced by index -- a
- * long gap between tournaments shows up as a long flat stretch, and a
- * flurry of matches on the same day cluster tightly together. Each point
- * gets its own date label along the bottom.
+ * Points are spaced evenly by index, one step per match played -- not by
+ * real elapsed time. A tournament is several matches played on the same
+ * calendar date, so a genuine time axis collapses them onto (almost) the
+ * same X position, which reads as overlapping dots; spacing by event
+ * instead gives every match its own, evenly-spaced point on the line.
+ * Each point still gets its own date label along the bottom.
  */
 (function (window) {
   function renderEloChart(container, history) {
@@ -31,20 +32,7 @@
     const innerW = W - PAD_L - PAD_R;
     const innerH = H - PAD_T - PAD_B;
 
-    const timestamps = history.map((h) => (h.date ? new Date(h.date).getTime() : NaN));
-    const validTs = timestamps.filter((t) => !isNaN(t));
-    const minTs = validTs.length ? Math.min(...validTs) : 0;
-    const maxTs = validTs.length ? Math.max(...validTs) : 0;
-    const hasTimeSpread = validTs.length === timestamps.length && maxTs > minTs;
-
-    const xFor = (i) => {
-      if (hasTimeSpread) {
-        return PAD_L + ((timestamps[i] - minTs) / (maxTs - minTs)) * innerW;
-      }
-      // No usable date spread (missing dates, or every point on the same
-      // day) -- fall back to even spacing by index.
-      return PAD_L + (history.length === 1 ? innerW / 2 : (i / (history.length - 1)) * innerW);
-    };
+    const xFor = (i) => PAD_L + (history.length === 1 ? innerW / 2 : (i / (history.length - 1)) * innerW);
     const yFor = (v) => PAD_T + innerH - ((v - min) / (max - min)) * innerH;
 
     const points = history.map((h, i) => ({ x: xFor(i), y: yFor(h.elo), h }));
