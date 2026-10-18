@@ -1465,5 +1465,320 @@
     "archetypesA": [],
     "archetypesB": [],
     "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r1_0",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 1,
+    "playerA": "p_mve30wdtb4x2",
+    "playerB": "p_mv5ezebcueb1",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "U",
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Aggro",
+      "pingers"
+    ],
+    "archetypesB": [
+      "Midrange"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r1_1",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 1,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 0,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [
+      "Control"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r1_2",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 1,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mve30wdt642i",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r1_3",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 1,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mve30wdtcjcw",
+    "scoreA": 1,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r2_4",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 2,
+    "playerA": "p_mv5ezebcueb1",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "U",
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Midrange"
+    ],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r2_5",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 2,
+    "playerA": "p_mtq7yme9rckf",
+    "playerB": "p_mve30wdtb4x2",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Control"
+    ],
+    "archetypesB": [
+      "Aggro",
+      "pingers"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r2_6",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 2,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r2_7",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 2,
+    "playerA": "p_mve30wdtcjcw",
+    "playerB": "p_mve30wdt642i",
+    "scoreA": 0,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r3_8",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 3,
+    "playerA": "p_mv5ezebcueb1",
+    "playerB": "p_mve30wdtcjcw",
+    "scoreA": 2,
+    "scoreB": 1,
+    "colorsA": [
+      "U",
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [
+      "Midrange"
+    ],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r3_9",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 3,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mve30wdtb4x2",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [
+      "Aggro",
+      "pingers"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r3_10",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 3,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mtq7yme9rckf",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [
+      "Control"
+    ],
+    "note": ""
+  },
+  {
+    "id": "t_mve30xg1bq0f_r3_11",
+    "date": "2026-10-18",
+    "tournamentId": "t_mve30xg1bq0f",
+    "tournamentName": "Reality Fractured",
+    "round": 3,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mve30wdt642i",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
   }
 ]
