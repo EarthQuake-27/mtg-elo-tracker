@@ -1780,5 +1780,233 @@
     "archetypesA": [],
     "archetypesB": [],
     "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r1_0",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 1,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_muabgikw25j0",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r1_1",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 1,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_muabgikwn8b0",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r1_2",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 1,
+    "playerA": "p_mtrrzxaqahsa",
+    "playerB": "p_mtq7yme9o5zi",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "U",
+      "R"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r2_3",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 2,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r2_4",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 2,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_muabgikw25j0",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "U",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [
+      "U"
+    ],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r2_5",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 2,
+    "playerA": "p_mtq7yme9o5zi",
+    "playerB": "p_muabgikwn8b0",
+    "scoreA": 1,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r3_6",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 3,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_muabgikwn8b0",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "U"
+    ],
+    "colorsB": [
+      "W",
+      "U"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r3_7",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 3,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_mtrrzxaqahsa",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mvppf559ihdv_r3_8",
+    "date": "2026-10-26",
+    "tournamentId": "t_mvppf559ihdv",
+    "tournamentName": "",
+    "round": 3,
+    "playerA": "p_muabgikw25j0",
+    "playerB": "p_mtq7yme9o5zi",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "B",
+      "G"
+    ],
+    "splashA": [
+      "U"
+    ],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
   }
 ]
