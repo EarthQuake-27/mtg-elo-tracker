@@ -2008,5 +2008,302 @@
     "archetypesA": [],
     "archetypesB": [],
     "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r1_0",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 1,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_mve30wdtcjcw",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r1_1",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 1,
+    "playerA": "p_mtq7yme9dknv",
+    "playerB": "p_mw9eu87vnhsq",
+    "scoreA": 2,
+    "scoreB": 1,
+    "colorsA": [
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r1_2",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 1,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "U",
+      "R"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r1_3",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 1,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mv5ezebcueb1",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "B",
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r2_4",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 2,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_mtq7yme9dknv",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r2_5",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 2,
+    "playerA": "p_mtq7yme91nol",
+    "playerB": "p_mve30wdtcjcw",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "B",
+      "R"
+    ],
+    "colorsB": [
+      "W",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r2_6",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 2,
+    "playerA": "p_mtq7yme95m8i",
+    "playerB": "p_mw9eu87vnhsq",
+    "scoreA": 1,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "G"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "B"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r2_7",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 2,
+    "playerA": "p_mtq7yme9c395",
+    "playerB": "p_mv5ezebcueb1",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "W",
+      "U",
+      "R"
+    ],
+    "colorsB": [
+      "B",
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r3_8",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 3,
+    "playerA": "p_mve30wdtcjcw",
+    "playerB": "p_mtq7yme95m8i",
+    "scoreA": 1,
+    "scoreB": 1,
+    "colorsA": [
+      "W",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r3_9",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 3,
+    "playerA": "p_mtq7yme9bjf6",
+    "playerB": "p_mtq7yme9c395",
+    "scoreA": 2,
+    "scoreB": 0,
+    "colorsA": [
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "W",
+      "U",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r3_10",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 3,
+    "playerA": "p_mw9eu87vnhsq",
+    "playerB": "p_mtq7yme91nol",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "W",
+      "U",
+      "B"
+    ],
+    "colorsB": [
+      "B",
+      "R"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
+  },
+  {
+    "id": "t_mw9eu87vnrjj_r3_11",
+    "date": "2026-11-07",
+    "tournamentId": "t_mw9eu87vnrjj",
+    "tournamentName": "Unstable",
+    "round": 3,
+    "playerA": "p_mv5ezebcueb1",
+    "playerB": "p_mtq7yme9dknv",
+    "scoreA": 0,
+    "scoreB": 2,
+    "colorsA": [
+      "B",
+      "R",
+      "G"
+    ],
+    "colorsB": [
+      "R",
+      "G"
+    ],
+    "splashA": [],
+    "splashB": [],
+    "archetypesA": [],
+    "archetypesB": [],
+    "note": ""
   }
 ]
